@@ -6,10 +6,10 @@
 
 ## 사용 기술 및 환경
 - Intellij IDEA
-- Spring Boot 3.2.4
-- MYSQL
+- Spring Boot : 3.2.4v
+- MYSQL : 8.3.0v
 - JPA
-- JDK 17.0.9
+- JDK : 17.0.9v
 
 <br>
 <br>
