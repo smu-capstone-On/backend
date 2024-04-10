@@ -3,12 +3,7 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/petshop
     username: root
-    password: rlarjs99
-
-kakao:
-  client_id: ff9ceddeab46bbdb2cd959ecdc4a8cf7
-  client_secret : j0UiZukPsWR7OnSwoEmJWcpGC8LlJWvu
-  redirect_uri: http://localhost:8080/kakao/login
+    password: 201810876
 
   jpa:
     hibernate:
@@ -16,6 +11,14 @@ kakao:
     properties:
       hibernate:
         format_sql: true
+
+
+kakao:
+  client_id: ff9ceddeab46bbdb2cd959ecdc4a8cf7
+  client_secret : j0UiZukPsWR7OnSwoEmJWcpGC8LlJWvu
+  redirect_uri: http://localhost:8080/kakao/login
+
+
 
 
 
