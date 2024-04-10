@@ -5,13 +5,14 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import lombok.Getter;
-import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDateTime;
 
 @Entity
-@Getter @Setter
-public class member {
+@Getter
+@SuperBuilder
+public class Member {
 
     @Id @GeneratedValue
     @Column(name = "member_id")
@@ -24,6 +25,8 @@ public class member {
     private Integer age;
 
     private String sex;
+
+    private String email;
 
     private String loginId;
 
