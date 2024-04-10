@@ -5,6 +5,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDateTime;
@@ -12,6 +13,7 @@ import java.time.LocalDateTime;
 @Entity
 @Getter
 @SuperBuilder
+@NoArgsConstructor
 public class Member {
 
     @Id @GeneratedValue
@@ -30,7 +32,7 @@ public class Member {
 
     private String loginId;
 
-    private String passWard;
+    private String password;
 
     private String imageUrl;
 

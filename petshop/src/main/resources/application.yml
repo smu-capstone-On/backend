@@ -5,14 +5,20 @@ spring:
     username: root
     password: rlarjs99
 
-
+kakao:
+  client_id: ff9ceddeab46bbdb2cd959ecdc4a8cf7
+  client_secret : j0UiZukPsWR7OnSwoEmJWcpGC8LlJWvu
+  redirect_uri: http://localhost:8080/kakao/login
 
   jpa:
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: update
     properties:
       hibernate:
         format_sql: true
+
+
+
 
 logging.level:
   org.hibernate.SQL: debug

@@ -6,6 +6,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 @Transactional(readOnly = true)
 @Service
 @RequiredArgsConstructor
@@ -26,21 +28,31 @@ public class MemberService {
 
     /**
      * 로그인 TODO 기능만들기
+     * 아이디와 패스워드가 일치하지 않으면 null 반환
      */
-    /*@Transactional
-    public void login(Member member){
+    public Member login(String loginId, String password){
+        Member member = memberRepository.findByLoginId(loginId);
+        if(member.getPassword().equals(password)){
+            return member;
+        }
+        return null;
 
-        memberRepository.save(member);
     }
-     */
+
 
     /**
      * 이메일로 아이디 찾기
-     * 일단 보류
+     *
      */
     public Member findIdByEmail(String email){
         return memberRepository.findByEmail(email);
+    }
 
+    /**
+     * 로그인아이디로 비밀번호 찾기
+     */
+    public Member findPwdByLoginId(String loginId){
+        return memberRepository.findByLoginId(loginId);
     }
 
 
