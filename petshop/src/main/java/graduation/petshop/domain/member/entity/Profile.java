@@ -30,5 +30,11 @@ public class Profile {
     public void setAge(Integer age) {
         this.age = age;
     }
+
+    @OneToOne(mappedBy = "profile", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Member member;
+    public void setMember(Member member) {
+        this.member = member;
+    }
 }
 
