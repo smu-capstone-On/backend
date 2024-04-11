@@ -1,5 +1,5 @@
-package graduation.petshop.domain.member.entity;
-
+package graduation.petshop.domain.profile.entity;
+import graduation.petshop.domain.member.entity.Member;
 import jakarta.persistence.*;
 import lombok.Getter;
 
@@ -17,7 +17,11 @@ public class Profile {
     @Enumerated(EnumType.STRING)
     private Gender sex; // 성별 [FEMALE, MALE]
 
+    @Enumerated(EnumType.STRING)
+    private PetStatus petStatus; // 반려동물 유무 [PETYES, PETNO]
+
     private Integer age;
+
 
     public void setNickName(String nickName) {
         this.nickName = nickName;
@@ -31,10 +35,18 @@ public class Profile {
         this.age = age;
     }
 
+    public void setPetStatus(PetStatus petStatus){
+        this.petStatus = petStatus;
+    }
+
+
+
     @OneToOne(mappedBy = "profile", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Member member;
     public void setMember(Member member) {
         this.member = member;
     }
+
+
 }
 

@@ -1,5 +1,6 @@
 package graduation.petshop.domain.member.entity;
 
+import graduation.petshop.domain.profile.entity.Profile;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -37,12 +38,5 @@ public class Member {
     @JoinColumn(name = "profile_id")
     private Profile profile;
 
-    // 비지니스 로직 추가. 프로필 수정
-    public void updateProfile(Profile newProfile) {
-        if (newProfile != null) {
-            this.profile.setNickName(newProfile.getNickName());
-            this.profile.setSex(newProfile.getSex());
-            this.profile.setAge(newProfile.getAge());
-        }
+
     }
-}

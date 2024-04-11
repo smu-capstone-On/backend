@@ -1,5 +1,5 @@
-package graduation.petshop.domain.member.repository;
-import graduation.petshop.domain.member.entity.Profile;
+package graduation.petshop.domain.profile.repository;
+import graduation.petshop.domain.profile.entity.Profile;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -14,5 +14,10 @@ public class ProfileRepository {
     public Profile save(Profile profile) {
         em.persist(profile);
         return profile;
+    }
+
+    // 프로필 조회
+    public Profile findById(Long id) {
+        return em.find(Profile.class, id);
     }
 }
