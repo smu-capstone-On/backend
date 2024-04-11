@@ -40,13 +40,12 @@ public class Profile {
     }
 
 
-
-    @OneToOne(mappedBy = "profile", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToOne
     private Member member;
     public void setMember(Member member) {
         this.member = member;
+        member.setProfile(this);
     }
-
 
 }
 

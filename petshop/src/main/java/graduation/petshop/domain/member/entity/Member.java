@@ -38,5 +38,9 @@ public class Member {
     @JoinColumn(name = "profile_id")
     private Profile profile;
 
-
+    public void setProfile(Profile profile) {
+        this.profile = profile;
+        profile.setMember(this);
     }
+}
+
