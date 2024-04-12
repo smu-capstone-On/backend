@@ -31,9 +31,6 @@ public class ProfileService {
         profile.setAge(requestDto.getAge());
         profile.setPetStatus(requestDto.getPetStatus());
 
-        // 프로필과 회원 연결
-        profile.setMember(member);
-
         // 프로필 저장
         profileRepository.save(profile);
 
@@ -45,8 +42,7 @@ public class ProfileService {
     public void updateProfile(Long profileId, RequestUpdateProfileDto requestDto) {
         Profile profile = profileRepository.findById(profileId);
         if (profile == null) {
-            // 프로필이 존재하지 않을 경우 예외 처리
-            throw new IllegalArgumentException("프로필을 찾을 수 없습니다.");
+            throw new IllegalArgumentException("프로필을 찾을 수 없습니다. 프로필 ID: " + profileId);
         }
         // 요청된 정보로 프로필 업데이트
         profile.setNickName(requestDto.getNickName());
@@ -57,6 +53,7 @@ public class ProfileService {
         // 변경된 프로필 저장
         profileRepository.save(profile);
     }
+
 
 
     public ResponseFindProfileDto getProfileById(Long profileId) {

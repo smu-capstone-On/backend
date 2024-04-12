@@ -11,10 +11,11 @@ public class ProfileRepository {
     private final EntityManager em;
 
     //프로필 저장
-    public Profile save(Profile profile) {
+    public Long save(Profile profile) {
         em.persist(profile);
-        return profile;
+        return profile.getId(); // 저장된 프로필의 ID 반환
     }
+
 
     // 프로필 조회
     public Profile findById(Long id) {
