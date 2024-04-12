@@ -63,7 +63,6 @@ public class ProfileService {
         }
 
         ResponseFindProfileDto profileDto = new ResponseFindProfileDto();
-        profileDto.setProfileId(profile.getId());
         profileDto.setNickName(profile.getNickName());
         profileDto.setSex(profile.getSex());
         profileDto.setAge(profile.getAge());

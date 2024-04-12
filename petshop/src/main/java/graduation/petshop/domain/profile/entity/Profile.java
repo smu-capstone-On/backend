@@ -22,6 +22,7 @@ public class Profile {
 
     private Integer age;
 
+    
 
     public void setNickName(String nickName) {
         this.nickName = nickName;
@@ -38,9 +39,6 @@ public class Profile {
     public void setPetStatus(PetStatus petStatus){
         this.petStatus = petStatus;
     }
-
-
-
 
 }
 
