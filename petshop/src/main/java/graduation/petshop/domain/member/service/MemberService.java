@@ -15,6 +15,22 @@ public class MemberService {
 
     private final MemberRepository memberRepository;
 
+
+
+    // (김범수) 중복 조회 - 저장된 이메일이 존재하는 지 확인
+
+    public String duplicationCheck(String CheckingEmail){
+
+        if(memberRepository.findByEmail(CheckingEmail) != null ){       // 이거 쿼리 조회 안 되면 null 맞아??
+            return null;               //  중복 시 null 반환
+        }
+
+        return CheckingEmail; // 중복된 email이 아니면 그 email 반환
+    }
+
+
+    //
+
     /**
      * 회원가입
      * 중복조회 필요한가?

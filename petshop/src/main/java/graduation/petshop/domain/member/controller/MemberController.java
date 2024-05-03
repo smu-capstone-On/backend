@@ -1,5 +1,6 @@
 package graduation.petshop.domain.member.controller;
 
+import graduation.petshop.domain.email.EmailController;
 import graduation.petshop.domain.member.dto.request.JoinDto;
 import graduation.petshop.domain.member.dto.request.LoginDto;
 import graduation.petshop.domain.member.dto.request.RequestFindIdDto;
@@ -37,8 +38,29 @@ public class MemberController {
                 joinDto.getPassword(),
                 joinDto.getEmail()
         );
-        memberService.join(member);
-        return ResponseEntity.ok("ok");
+
+        //김범수
+
+        if (memberService.duplicationCheck(member.getEmail()) != null){          // 중복검사
+
+//            EmailController;
+
+            if(EmailController.checkingEmailFirst(member) == true){
+                log.info("이메일 전달 완료");
+                if(EmailController.checkingEmailSecond(member)==true) {
+                    memberService.join(member);
+                    log.info("회원가입 완료");
+                    return ResponseEntity.ok("ok");
+
+                }
+            }
+        }
+        return ResponseEntity.badRequest().build(); // 오류 메세지 이게 맞나 확인을 어떻게 하죠?
+
+        //
+
+//        memberService.join(member);
+//        return ResponseEntity.ok("ok");
     }
 
     /**

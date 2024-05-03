@@ -37,4 +37,13 @@ public class Member {
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "profile_id")
     private Profile profile;
+
+    //김범수
+    private String userInsertedKey;
+
+    public void setUserInsertedKey(String userInsertedKey){
+        this.userInsertedKey = userInsertedKey;
+    }
+
+    //
 }
