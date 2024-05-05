@@ -65,7 +65,7 @@ public class ProfileController {
         if (myProfile != null) {
             FindMyProfileDto findMyProfileDto = new FindMyProfileDto(
                     myProfile.getNickName(),
-                    myProfile.getSex(),x
+                    myProfile.getSex(),
                     myProfile.getAge(),
                     myProfile.getPetStatus()
             );
