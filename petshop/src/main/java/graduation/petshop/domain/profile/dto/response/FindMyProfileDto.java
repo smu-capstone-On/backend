@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ResponseFindProfileDto {
+public class FindMyProfileDto {
     private String nickName;
     private Gender sex;
     private Integer age;

@@ -1,53 +1,79 @@
 package graduation.petshop.domain.profile.controller;
 
-import graduation.petshop.domain.profile.dto.request.RequestCreateProfileDto;
-import graduation.petshop.domain.profile.dto.request.RequestUpdateProfileDto;
-import graduation.petshop.domain.profile.dto.response.ResponseFindProfileDto;
+
+import graduation.petshop.domain.profile.dto.request.JoinProfileDto;
+import graduation.petshop.domain.profile.dto.request.ModifyProfileDto;
+import graduation.petshop.domain.profile.dto.response.FindMyProfileDto;
+import graduation.petshop.domain.profile.entity.PetStatus;
+import graduation.petshop.domain.profile.entity.Profile;
 import graduation.petshop.domain.profile.service.ProfileService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
 @RestController
-@RequiredArgsConstructor
 @RequestMapping("/profiles")
+@RequiredArgsConstructor
 @Slf4j
 public class ProfileController {
 
     private final ProfileService profileService;
 
-    // post -> 프로필 생성 메소드
+    // POST -> 프로필 생성 메소드
     @PostMapping("/{memberId}")
-    public ResponseEntity<Long> createProfile(@PathVariable Long memberId, @RequestBody @Validated RequestCreateProfileDto requestDto) {
+    public ResponseEntity<Long> createProfile(@PathVariable Long memberId, @RequestBody @Validated JoinProfileDto joinProfileDto) {
         log.info("프로필 생성 {}", memberId);
-        Long profileId = profileService.createProfile(memberId, requestDto);
-        log.info("프로필 생성완료. {}", profileId);
+
+        //Profile 엔티티를 생성
+        Profile profile = joinProfileDto.toEntity(
+                joinProfileDto.getNickName(),
+                joinProfileDto.getSex(),
+                joinProfileDto.getAge(),
+                joinProfileDto.getPetStatus()
+        );
+
+        // 프로필 생성 메소드 호출하여 프로필 저장 후 ID 반환
+        Long profileId = profileService.join(profile);
+
+        // 생성된 프로필의 ID를 반환
         return ResponseEntity.ok(profileId);
     }
 
-    // get -> 프로필 조회 메소드
-    @GetMapping("/{profileId}")
-    public ResponseEntity<ResponseFindProfileDto> getProfile(@PathVariable Long profileId) {
-        log.info("프로필 조회 {}", profileId);
+    // PUT -> 프로필 수정 메소드
+    @PutMapping("/{profileId}")
+    public ResponseEntity<Void> modifyProfile(@PathVariable Long profileId, @RequestBody @Validated ModifyProfileDto modifyProfileDto) {
+        log.info("프로필 수정 {}", profileId);
 
-        ResponseFindProfileDto profileDto = profileService.getProfileById(profileId);
+        // 프로필 수정 메소드 호출
+        profileService.modifyProfile(profileId, modifyProfileDto.getNickName(), modifyProfileDto.getPetStatus());
 
-        if (profileDto == null) {
-            log.error("프로필을 찾을 수 없습니다. {}", profileId);
+        // 수정 성공 시 204 No Content 상태코드 반환
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
+
+    // 마이페이지로 이동예정 GET -> 프로필 조회 메소드
+
+    @GetMapping("/{profileId}")//이것도 마이페이지로 이동 예정
+    public ResponseEntity<FindMyProfileDto> findMyProfile(@PathVariable Long profileId) {
+
+        Profile myProfile = profileService.findMyProfile(profileId);
+
+        if (myProfile != null) {
+            FindMyProfileDto findMyProfileDto = new FindMyProfileDto(
+                    myProfile.getNickName(),
+                    myProfile.getSex(),x
+                    myProfile.getAge(),
+                    myProfile.getPetStatus()
+            );
+            return ResponseEntity.ok(findMyProfileDto);
+        } else {
             return ResponseEntity.notFound().build();
         }
-
-        log.info("프로필 조회 {}", profileDto);
-        return ResponseEntity.ok(profileDto);
-    }
-
-    // put -> 프로필 업데이트 메소드
-    @PutMapping("/{profileId}")
-    public ResponseEntity<Long> updateProfile(@PathVariable Long profileId, @RequestBody @Validated RequestUpdateProfileDto requestDto) {
-        log.info("프로필 ID 업데이트 {}", profileId);
-        profileService.updateProfile(profileId, requestDto);
-        log.info("업데이트 완료.");
-        return ResponseEntity.ok().build();
     }
 }
+
+

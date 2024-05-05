@@ -33,8 +33,7 @@ public class Member {
 
     private LocalDateTime modifyDate;
 
-    // Member 엔티티와 Profile 엔티티 간의 일대일 관계 설정
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "profile_id")
+    // Profile 엔티티와의 일대일 양방향 관계 설정
+    @OneToOne(fetch = FetchType.LAZY, mappedBy = "member", cascade = CascadeType.ALL)
     private Profile profile;
 }

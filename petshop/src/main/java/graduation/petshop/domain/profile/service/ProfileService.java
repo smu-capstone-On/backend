@@ -1,15 +1,16 @@
 package graduation.petshop.domain.profile.service;
 
-import graduation.petshop.domain.profile.dto.request.RequestCreateProfileDto;
-import graduation.petshop.domain.member.entity.Member;
-import graduation.petshop.domain.profile.dto.request.RequestUpdateProfileDto;
-import graduation.petshop.domain.profile.dto.response.ResponseFindProfileDto;
+import graduation.petshop.domain.profile.dto.request.ModifyProfileDto;
+import graduation.petshop.domain.profile.entity.PetStatus;
 import graduation.petshop.domain.profile.entity.Profile;
 import graduation.petshop.domain.member.repository.MemberRepository;
 import graduation.petshop.domain.profile.repository.ProfileRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -19,55 +20,35 @@ public class ProfileService {
     private final ProfileRepository profileRepository;
     private final MemberRepository memberRepository;
 
+
+    /*프로필 생성*/
     @Transactional
-    public Long createProfile(Long memberId, RequestCreateProfileDto requestDto) {
-        // 회원 조회
-        Member member = memberRepository.findById(memberId);
+    public Long join(Profile profile) {
 
-        // 프로필 생성
-        Profile profile = new Profile();
-        profile.setNickName(requestDto.getNickName());
-        profile.setSex(requestDto.getSex());
-        profile.setAge(requestDto.getAge());
-        profile.setPetStatus(requestDto.getPetStatus());
-
-        // 프로필 저장
+        validateDuplicateProfile(profile); //중복 닉네임 검증.
         profileRepository.save(profile);
-
-        // 생성된 프로필의 ID 반환
         return profile.getId();
     }
 
-    @Transactional
-    public void updateProfile(Long profileId, RequestUpdateProfileDto requestDto) {
-        Profile profile = profileRepository.findById(profileId);
-        if (profile == null) {
-            throw new IllegalArgumentException("프로필을 찾을 수 없습니다. 프로필 ID: " + profileId);
+    private void validateDuplicateProfile(Profile profile) {
+        //EXCEPTION
+        List<Profile> findNickName = profileRepository.findByNickName(profile.getNickName());
+        if (!findNickName.isEmpty()) {
+            throw new IllegalStateException("이미 존재하는 닉네임입니다.");
         }
-        // 요청된 정보로 프로필 업데이트
-        profile.setNickName(requestDto.getNickName());
-        profile.setSex(requestDto.getSex());
-        profile.setAge(requestDto.getAge());
-        profile.setPetStatus(requestDto.getPetStatus());
-
-        // 변경된 프로필 저장
-        profileRepository.save(profile);
     }
 
+    /* 프로필 수정 (dirty checking) - 닉네임과 팻 상태만 수정할 수 있도록. */
+    @Transactional
+    public void modifyProfile(Long profileId, String newNickname, PetStatus petStatus) {
+        Profile profile = profileRepository.findById(profileId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 ID의 프로필이 존재하지 않습니다."));
+        profile.modify(newNickname, petStatus);
+    }
 
-
-    public ResponseFindProfileDto getProfileById(Long profileId) {
-        Profile profile = profileRepository.findById(profileId);
-        if (profile == null) {
-            return null;
-        }
-
-        ResponseFindProfileDto profileDto = new ResponseFindProfileDto();
-        profileDto.setNickName(profile.getNickName());
-        profileDto.setSex(profile.getSex());
-        profileDto.setAge(profile.getAge());
-        profileDto.setPetStatus(profile.getPetStatus());
-
-        return profileDto;
+    /*프로필 조회 -> 나중에 마이페이지에서 찾을 수 있도록?*/
+    public Profile findMyProfile(Long profileId) {
+        return profileRepository.findById(profileId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 ID의 프로필이 존재하지 않습니다."));
     }
 }
