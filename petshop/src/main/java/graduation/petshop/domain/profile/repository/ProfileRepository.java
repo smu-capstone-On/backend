@@ -21,7 +21,7 @@ public class ProfileRepository {
         return profile.getId(); // 저장된 프로필의 ID 반환
     }
 
-    // 프로필 조회
+    // 프로필 id로 조회
     public Optional<Profile> findById(Long id) {
         Profile profile = em.find(Profile.class, id);
         return Optional.ofNullable(profile);

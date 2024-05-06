@@ -4,6 +4,7 @@ import graduation.petshop.domain.profile.entity.Gender;
 import graduation.petshop.domain.profile.entity.PetStatus;
 import graduation.petshop.domain.profile.entity.Profile;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -21,24 +22,26 @@ public class JoinProfileDto {
     @NotBlank(message = "필수 입력 값입니다.")
     private String nickName;
 
-    @NotBlank(message = "필수 입력 값입니다.")
+    @NotNull(message = "필수 입력 값입니다.")
     private Gender sex;
 
-    @NotBlank(message = "필수 입력 값입니다.")
+    @NotNull(message = "필수 입력 값입니다.")
     private Integer age;
 
-    @NotBlank(message = "필수 입력 값입니다.")
+    @NotNull(message = "필수 입력 값입니다.")
     private PetStatus petStatus;
 
     /* DTO -> Entity */
 
-    public Profile toEntity(String nickName, Gender sex, Integer age, PetStatus petStatus){
+    // JoinProfileDto.java
+    public Profile toEntity() {
         return Profile.builder()
-                .nickName(nickName)
-                .sex(sex)
-                .age(age)
-                .petStatus(petStatus)
+                .nickName(this.nickName)
+                .sex(this.sex)
+                .age(this.age)
+                .petStatus(this.petStatus)
                 .build();
     }
+
 
 }

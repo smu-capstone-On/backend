@@ -27,20 +27,13 @@ public class ProfileController {
     public ResponseEntity<Long> createProfile(@PathVariable Long memberId, @RequestBody @Validated JoinProfileDto joinProfileDto) {
         log.info("프로필 생성 {}", memberId);
 
-        //Profile 엔티티를 생성
-        Profile profile = joinProfileDto.toEntity(
-                joinProfileDto.getNickName(),
-                joinProfileDto.getSex(),
-                joinProfileDto.getAge(),
-                joinProfileDto.getPetStatus()
-        );
-
         // 프로필 생성 메소드 호출하여 프로필 저장 후 ID 반환
-        Long profileId = profileService.join(profile);
+        Long profileId = profileService.join(joinProfileDto);
 
         // 생성된 프로필의 ID를 반환
         return ResponseEntity.ok(profileId);
     }
+
 
     // PUT -> 프로필 수정 메소드
     @PutMapping("/{profileId}")
@@ -48,11 +41,12 @@ public class ProfileController {
         log.info("프로필 수정 {}", profileId);
 
         // 프로필 수정 메소드 호출
-        profileService.modifyProfile(profileId, modifyProfileDto.getNickName(), modifyProfileDto.getPetStatus());
+        profileService.modifyProfile(profileId, modifyProfileDto);
 
         // 수정 성공 시 204 No Content 상태코드 반환
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
+
 
 
     // 마이페이지로 이동예정 GET -> 프로필 조회 메소드
