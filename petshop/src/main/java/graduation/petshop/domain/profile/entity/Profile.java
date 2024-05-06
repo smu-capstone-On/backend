@@ -15,7 +15,7 @@ public class Profile {
     @Column(name = "profile_id")
     private Long id;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private String nickName;
 
     @Enumerated(EnumType.STRING)

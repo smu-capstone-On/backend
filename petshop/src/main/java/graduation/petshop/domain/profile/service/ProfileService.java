@@ -34,7 +34,7 @@ public class ProfileService {
         profile.modify(modifyProfileDto.getNickName(), modifyProfileDto.getPetStatus());
     }
 
-    /*프로필 조회 -> 나중에 마이페이지에서 찾을 수 있도록?*/
+    /*프로필 조회 -> 나중에 마이페이지에서 찾을 수 있도록*/
     @Transactional(readOnly = true)
     public Profile findMyProfile(Long profileId) {
         return profileRepository.findById(profileId)
@@ -42,7 +42,7 @@ public class ProfileService {
     }
 
     @Transactional(readOnly = true)
-    private void validateDuplicateProfile(String nickName) {
+    protected void validateDuplicateProfile(String nickName) {
         List<Profile> findNickName = profileRepository.findByNickName(nickName);
         if (!findNickName.isEmpty()) {
             throw new IllegalStateException("이미 존재하는 닉네임입니다.");

@@ -1,6 +1,5 @@
 package graduation.petshop.domain.profile.repository;
 import graduation.petshop.domain.profile.entity.Profile;
-import graduation.petshop.exception.DuplicateNickNameException;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
