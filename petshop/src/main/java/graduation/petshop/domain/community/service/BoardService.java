@@ -2,10 +2,13 @@ package graduation.petshop.domain.community.service;
 
 import graduation.petshop.domain.community.dto.BoardPatchDto;
 import graduation.petshop.domain.community.dto.BoardPostDto;
+import graduation.petshop.domain.community.dto.BoardResponseDto;
 import graduation.petshop.domain.community.entity.Board;
 import graduation.petshop.domain.community.repository.BoardRepository;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -38,6 +41,9 @@ public class BoardService {
 
 
 
+
+
+    //
 
     public Board findBoardId(Long boardId) {
         return boardRepository.findById(boardId)
@@ -72,4 +78,22 @@ public class BoardService {
         }
     }
 
+
+    // 정적인데 변환 필요
+
+
+
+
+
+    public BoardResponseDto findByBoardId(Long boardId) {
+
+        Board board = findBoardId(boardId);
+        return BoardResponseDto.FindFromBoard(board);
+    }
+
+
+    public Page<BoardResponseDto> findAllBoards(Pageable pageable) {
+        Page<Board> boards = boardRepository.findAll(pageable);
+        return boards.map(BoardResponseDto::FindFromBoard); //board -> BoardResponseDto.FindFromBoard(board)
+    }
 }
