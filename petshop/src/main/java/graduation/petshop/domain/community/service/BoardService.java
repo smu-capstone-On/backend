@@ -30,6 +30,15 @@ public class BoardService {
 
     }
 
+    public void deleteBoard(Long boardId) {
+        findBoardId(boardId);
+        boardRepository.deleteById(boardId);
+    }
+
+
+
+
+
     public Board findBoardId(Long boardId) {
         return boardRepository.findById(boardId)
                 .orElseThrow(()->new BusinessLogicException(ExceptionCode.BOARD_NOT_FOUND));
