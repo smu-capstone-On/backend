@@ -4,17 +4,21 @@ import graduation.petshop.domain.community.dto.BoardPatchDto;
 import graduation.petshop.domain.community.dto.BoardPostDto;
 import graduation.petshop.domain.community.dto.BoardResponseDto;
 import graduation.petshop.domain.community.entity.Board;
+import graduation.petshop.domain.community.entity.Reply;
 import graduation.petshop.domain.community.repository.BoardRepository;
+import graduation.petshop.domain.community.repository.ReplyRepository;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+
 @Service
 @RequiredArgsConstructor
 public class BoardService {
     private final BoardRepository boardRepository;
+
 
     public Long createBoard(BoardPostDto boardPostDto) {
         Board board = new Board();

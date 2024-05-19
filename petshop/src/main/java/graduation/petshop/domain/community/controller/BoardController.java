@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.*;
 @Getter
 @Setter
 @RestController
-//@RequestMapping("/api/boards")
+@RequestMapping("/api/boards")
 @RequiredArgsConstructor
 public class BoardController {
 
