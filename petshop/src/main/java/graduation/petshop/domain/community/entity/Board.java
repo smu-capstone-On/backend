@@ -8,6 +8,7 @@ import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -30,8 +31,8 @@ public class Board {
 
     private String content; //본문
 
-    @OneToMany(mappedBy = "board", orphanRemoval = true)
-    private List<Comment> comments; //댓글
+    @OneToMany(mappedBy = "board", cascade = {CascadeType.PERSIST,CascadeType.REMOVE})
+    private List<Reply> reply = new ArrayList<>(); //댓글
 
     private Integer commentCnt; //댓글 수
 
@@ -49,10 +50,10 @@ public class Board {
 
 
     //글 수정 비지니스 로직 추가.
-    public void UpdateBoard(Long boardId, String title, String content) {
-        this.boardId = boardId;
-        this.title = title;
-        this.content = content;
-    }
+//    public void UpdateBoard(Long boardId, String title, String content) {
+//        this.boardId = boardId;
+//        this.title = title;
+//        this.content = content;
+//    }
 }
 

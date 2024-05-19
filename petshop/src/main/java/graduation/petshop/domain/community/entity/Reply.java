@@ -10,14 +10,14 @@ import lombok.experimental.SuperBuilder;
 @Getter
 @SuperBuilder
 @NoArgsConstructor
-public class Comment {
+public class Reply {
 
     @Id
     @GeneratedValue
     @Column(name = "comment_id")
-    private Long id;
+    private Long replyId;
 
-    private String body;
+    private String reContent;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "board_id")
@@ -28,8 +28,8 @@ public class Comment {
     private Profile profile;
 
     /* 비지니스 로직 추가 댓글 수정 기능 */
-    public void ModifyComment(Long id, String body) {
-        this.id = id;
-        this.body = body;
-    }
+//    public void ModifyComment(Long id, String body) {
+//        this.id = id;
+//        this.body = body;
+//    }
 }

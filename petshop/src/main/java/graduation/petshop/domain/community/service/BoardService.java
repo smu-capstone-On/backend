@@ -96,4 +96,6 @@ public class BoardService {
         Page<Board> boards = boardRepository.findAll(pageable);
         return boards.map(BoardResponseDto::FindFromBoard); //board -> BoardResponseDto.FindFromBoard(board)
     }
+
+
 }
