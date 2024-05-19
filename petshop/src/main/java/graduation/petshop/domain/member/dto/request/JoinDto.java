@@ -2,6 +2,7 @@ package graduation.petshop.domain.member.dto.request;
 
 import graduation.petshop.domain.member.entity.Member;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Size;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -12,6 +13,7 @@ import java.time.LocalDateTime;
 public class JoinDto {
 
     @NotEmpty
+    @Size(max = 20)
     private String loginId;
     @NotEmpty
     private String password;

@@ -22,25 +22,23 @@ public class MemberRepository {
     }
 
     //아이디로 찾기
-    public Member findById(Long id){
-        return em.find(Member.class,id);
+    public Optional<Member> findById(Long id){
+        return Optional.ofNullable(em.find(Member.class,id));
     }
 
     //로그인 아이디로 찾기
-    public Member findByLoginId(String loginId){
-        return em.createQuery("select m from Member m where m.loginId = :loginId", Member.class).setParameter("loginId", loginId).getSingleResult();
+    public Optional<Member> findByLoginId(String loginId){
+        return Optional.ofNullable(em.createQuery("select m from Member m where m.loginId = :loginId", Member.class).setParameter("loginId", loginId).getSingleResult());
     }
 
     //이메일로 찾기
-    public Member findByEmail(String email){
-        return em.createQuery("select m from Member m where m.email = :email", Member.class).setParameter("email", email).getSingleResult();
+    public Optional<Member>  findByEmail(String email){
+        return Optional.ofNullable(em.createQuery("select m from Member m where m.email = :email", Member.class).setParameter("email", email).getSingleResult());
     }
     //전체 찾기
     public List<Member> findAll(){
         return em.createQuery("select m from Member m", Member.class).getResultList();
     }
-
-
 
 
 }

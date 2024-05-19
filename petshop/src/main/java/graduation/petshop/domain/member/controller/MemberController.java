@@ -29,8 +29,8 @@ public class MemberController {
      * service에 회원가입 안 넣고 Controller에 넣었다.
      * 분리가 필요하다 생각함
      */
-    @PostMapping("/member/add")
-    public ResponseEntity<Object> joinMember(@RequestBody @Valid JoinDto joinDto){
+    @PostMapping("/member/join")
+    public ResponseEntity<Object> memberJoin(@RequestBody @Valid JoinDto joinDto){
         log.info("회원가입 완료");
         Member member = joinDto.toEntity(
                 joinDto.getLoginId(),
@@ -80,5 +80,22 @@ public class MemberController {
         log.info("로그인 성공");
         return ResponseEntity.ok("로그인 성공");
     }
+
+    /**
+     * 회원가입 아이디 중복 확인
+     */
+    @GetMapping("/member/join/loginid")
+    public ResponseEntity<Object> memberJoinLoginId(@RequestBody @Valid RequestFindPwdDto requestFindPwdDto){
+        try{
+            memberService.checkLoginId(requestFindPwdDto.getLoginId());
+        }
+        catch(IllegalStateException e){
+            return new ResponseEntity(HttpStatus.BAD_REQUEST);
+        }
+
+        return ResponseEntity.ok("중복이 아닙니다.");
+    }
+
+
 
 }

@@ -1,12 +1,12 @@
 package graduation.petshop.domain.member.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 
@@ -14,29 +14,26 @@ import java.time.LocalDateTime;
 @Getter
 @SuperBuilder
 @NoArgsConstructor
-public class Member {
+@EntityListeners(AuditingEntityListener.class)
+public class Member{
 
-    @Id @GeneratedValue
+    @Id @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "member_id")
     private Long id;
 
     private String name;
 
-    private String nickName;
-
-    private Integer age;
-
-    private String sex;
-
     private String email;
 
+    @Column(name = "login_id")
     private String loginId;
 
     private String password;
 
-    private String imageUrl;
-
+    @CreatedDate
     private LocalDateTime createDate;
 
+    @LastModifiedDate
     private LocalDateTime modifyDate;
+
 }
