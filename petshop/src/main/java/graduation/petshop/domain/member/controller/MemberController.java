@@ -32,12 +32,7 @@ public class MemberController {
     @PostMapping("/member/join")
     public ResponseEntity<Object> memberJoin(@RequestBody @Valid JoinDto joinDto){
         log.info("회원가입 완료");
-        Member member = joinDto.toEntity(
-                joinDto.getLoginId(),
-                joinDto.getPassword(),
-                joinDto.getEmail()
-        );
-        memberService.join(member);
+        memberService.join(joinDto);
         return ResponseEntity.ok("ok");
     }
 

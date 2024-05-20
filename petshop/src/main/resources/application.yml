@@ -17,10 +17,6 @@ kakao:
   client_secret : j0UiZukPsWR7OnSwoEmJWcpGC8LlJWvu
   redirect_uri: http://localhost:8080/kakao/login
 
-redis:
-  port :
-  host :
-
 
 logging.level:
   org.hibernate.SQL: debug

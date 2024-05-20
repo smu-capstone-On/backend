@@ -1,8 +1,14 @@
 package graduation.petshop.domain.member.service;
 
+import graduation.petshop.domain.member.dto.request.JoinDto;
 import graduation.petshop.domain.member.entity.Member;
 import graduation.petshop.domain.member.repository.MemberRepository;
+import io.jsonwebtoken.security.Password;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -12,15 +18,23 @@ import java.util.Optional;
 @Transactional(readOnly = true)
 @Service
 @RequiredArgsConstructor
-public class MemberService {
+public class MemberService implements UserDetailsService {
 
     private final MemberRepository memberRepository;
+    private final BCryptPasswordEncoder passwordEncoder;
 
     /**
      * 회원가입
+     * 여기서 중복조회 하는게 더 낫나?
      */
     @Transactional
-    public void join(Member member) {
+    public void join(JoinDto joinDto) {
+        Member member = joinDto.toEntity(
+                joinDto.getLoginId(),
+                joinDto.getPassword(),
+                joinDto.getEmail()
+        );
+        member.passwordEncode(passwordEncoder);
         memberRepository.save(member);
     }
 
@@ -66,4 +80,11 @@ public class MemberService {
             }
         }
 
+    /**
+     *
+     */
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        return null;
     }
+}
