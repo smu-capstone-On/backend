@@ -1,4 +1,5 @@
 package graduation.petshop.domain.profile.entity;
+import graduation.petshop.domain.chat.entity.ChatMessage;
 import graduation.petshop.domain.community.entity.Board;
 import graduation.petshop.domain.community.entity.Comment;
 import graduation.petshop.domain.member.entity.Member;
@@ -48,6 +49,12 @@ public class Profile {
 
     @OneToMany(mappedBy = "profile",orphanRemoval = true)
     private List<Comment> comment;
+
+    @OneToMany(mappedBy = "sender")
+    private List<ChatMessage> sentMessages;
+
+    @OneToMany(mappedBy = "recipient")
+    private List<ChatMessage> receivedMessages;
 
     /* 닉네임 수정 로직*/
     public void modify(String nickName, PetStatus petStatus) {

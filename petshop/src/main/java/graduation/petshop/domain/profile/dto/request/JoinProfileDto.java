@@ -18,8 +18,9 @@ import lombok.NoArgsConstructor;
 public class JoinProfileDto {
 
     /** 회원 Service 요청(Request) DTO 클래스 */
-    @Pattern(regexp = "^[ㄱ-ㅎ가-힣a-z0-9-_]{4,10}$", message = "닉네임는 특수문자를 제외한 4~10 자리여야 합니다.")
-    @NotBlank(message = "필수 입력 값입니다.")
+
+    @NotBlank(message = "닉네임은 필수 항목입니다.")
+    @Pattern(regexp = "^[ㄱ-ㅎ가-힣a-zA-Z0-9-_]{2,10}$", message = "닉네임는 특수문자를 제외한 4~10 자리여야 합니다.")
     private String nickName;
 
     @NotNull(message = "필수 입력 값입니다.")

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Create Profile</title>
+    <script>
+        async function createProfile() {
+            const memberId = document.getElementById("memberId").value;
+            const nickName = document.getElementById("nickName").value;
+            const sex = document.querySelector('input[name="sex"]:checked').value;
+            const petStatus = document.querySelector('input[name="petStatus"]:checked').value;
+            const age = document.getElementById("age").value;
+
+            const profileData = {
+                nickName: nickName,
+                sex: sex,
+                petStatus: petStatus,
+                age: age
+            };
+
+            try {
+                const response = await fetch(`/profiles/${memberId}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(profileData)
+                });
+
+                if (response.ok) {
+                    const profileId = await response.json();
+                    alert(`Profile created successfully with ID: ${profileId}`);
+                } else {
+                    alert('Failed to create profile');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Error creating profile');
+            }
+        }
+    </script>
+</head>
+<body>
+<h1>Create Profile</h1>
+<form onsubmit="event.preventDefault(); createProfile();">
+    <label for="memberId">Member ID:</label>
+    <input type="text" id="memberId" name="memberId" required><br><br>
+
+    <label for="nickName">Nickname:</label>
+    <input type="text" id="nickName" name="nickName" required><br><br>
+
+    <label>Sex:</label>
+    <input type="radio" id="male" name="sex" value="MALE" required>
+    <label for="male">Male</label>
+    <input type="radio" id="female" name="sex" value="FEMALE" required>
+    <label for="female">Female</label><br><br>
+
+    <label>Pet Status:</label>
+    <input type="radio" id="petYes" name="petStatus" value="PETYES" required>
+    <label for="petYes">Yes</label>
+    <input type="radio" id="petNo" name="petStatus" value="PETNO" required>
+    <label for="petNo">No</label><br><br>
+
+    <label for="age">Age:</label>
+    <input type="number" id="age" name="age" required><br><br>
+
+    <button type="submit">Create Profile</button>
+</form>
+</body>
+</html>
