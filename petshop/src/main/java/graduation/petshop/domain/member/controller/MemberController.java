@@ -25,6 +25,16 @@ public class MemberController {
     private final MemberService memberService;
 
     /**
+     * 테스트 목적
+     */
+    @GetMapping("/test")
+    public String testObject(){
+        return "안뇽";
+    }
+
+
+
+    /**
      * 회원가입
      * service에 회원가입 안 넣고 Controller에 넣었다.
      * 분리가 필요하다 생각함
@@ -57,26 +67,6 @@ public class MemberController {
     }
 
     /**
-     * 로그인
-     *
-     */
-    @GetMapping("/member/login")
-    public ResponseEntity<Object> memberLogin(@RequestBody @Valid LoginDto loginDto, BindingResult bindingResult){
-
-        if(bindingResult.hasErrors()){
-            return new ResponseEntity(HttpStatus.BAD_REQUEST);
-        }
-
-        Member member = memberService.login(loginDto.getLoginId(), loginDto.getPassword());
-
-        if(member == null) {
-            return new ResponseEntity(HttpStatus.BAD_REQUEST);
-        }
-        log.info("로그인 성공");
-        return ResponseEntity.ok("로그인 성공");
-    }
-
-    /**
      * 회원가입 아이디 중복 확인
      */
     @GetMapping("/member/join/loginid")
@@ -90,7 +80,5 @@ public class MemberController {
 
         return ResponseEntity.ok("중복이 아닙니다.");
     }
-
-
 
 }

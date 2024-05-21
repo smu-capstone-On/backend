@@ -2,6 +2,8 @@ package graduation.petshop.security.jwt.filter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import graduation.petshop.domain.member.dto.request.LoginDto;
+import graduation.petshop.security.jwt.dto.CustomUserDetails;
+import graduation.petshop.security.jwt.util.JwtUtil;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletInputStream;
 import jakarta.servlet.http.HttpServletRequest;
@@ -23,11 +25,11 @@ import java.nio.charset.StandardCharsets;
 public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
     private final AuthenticationManager authenticationManager;
+    private final JwtUtil jwtUtil;
 
-
-    public LoginFilter(AuthenticationManager authenticationManager){
+    public LoginFilter(AuthenticationManager authenticationManager,JwtUtil jwtUtil){
         this.authenticationManager = authenticationManager;
-        setFilterProcessesUrl("member/login");
+        this.jwtUtil = jwtUtil;
     }
 
     @Override
@@ -60,15 +62,26 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         //token에 담은 검증을 위한 AuthenticationManager로 전달
         return authenticationManager.authenticate(authToken);
     }
+
     //로그인 성공시 실행하는 메소드
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authentication) {
+        CustomUserDetails customUserDetails = (CustomUserDetails) authentication.getPrincipal();
+
+        String loginId = customUserDetails.getUsername();
+
+        String token = jwtUtil.createJwt(loginId, 60 * 60 * 1000L);
+
+        response.addHeader("Authorization", "Bearer "+token);
 
     }
+
     //로그인 실패시 실행하는 메소드
     @Override
     protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) {
 
+        response.setStatus(401);
+        log.info("로그인 실패");
     }
 
 

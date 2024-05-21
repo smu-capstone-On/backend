@@ -3,6 +3,7 @@ package graduation.petshop.domain.member.service;
 import graduation.petshop.domain.member.dto.request.JoinDto;
 import graduation.petshop.domain.member.entity.Member;
 import graduation.petshop.domain.member.repository.MemberRepository;
+import graduation.petshop.security.jwt.dto.CustomUserDetails;
 import io.jsonwebtoken.security.Password;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -40,22 +41,6 @@ public class MemberService implements UserDetailsService {
 
 
     /**
-     * 아이디와 패스워드가 일치하지 않으면 null 반환
-     */
-    public Member login(String loginId, String password) {
-        return memberRepository.findByLoginId(loginId)
-                .filter(m -> m.getPassword().equals(password))
-                .orElse(null);
-        /*if(member.get().getPassword().equals(password)){
-            return member.get();
-        }
-        return null;
-
-         */
-    }
-
-
-    /**
      * 이메일로 아이디 찾기
      *
      */
@@ -81,10 +66,15 @@ public class MemberService implements UserDetailsService {
         }
 
     /**
-     *
+     * userdetailservice의
+     * username은 DaoAuthenticationProvider가 토큰에서 꺼내서 설정해줌
      */
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return null;
+    public UserDetails loadUserByUsername(String loginId) throws UsernameNotFoundException {
+
+        Member member = memberRepository.findByLoginId(loginId)
+                .orElseThrow(() -> new UsernameNotFoundException("해당 아이디가 존재하지 않습니다.")); ;
+
+        return new CustomUserDetails(member);
     }
 }

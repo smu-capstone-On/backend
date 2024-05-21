@@ -1,6 +1,8 @@
 package graduation.petshop.security;
 
+import graduation.petshop.security.jwt.filter.JwtFilter;
 import graduation.petshop.security.jwt.filter.LoginFilter;
+import graduation.petshop.security.jwt.util.JwtUtil;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -19,9 +21,12 @@ public class SecurityConfig {
     //AuthenticationManager가 인자로 받을 AuthenticationConfiguraion 객체 생성자 주입
     private final AuthenticationConfiguration authenticationConfiguration;
 
-    public SecurityConfig(AuthenticationConfiguration authenticationConfiguration) {
+    private final JwtUtil jwtUtil;
+
+    public SecurityConfig(AuthenticationConfiguration authenticationConfiguration,JwtUtil jwtUtil) {
 
         this.authenticationConfiguration = authenticationConfiguration;
+        this.jwtUtil = jwtUtil;
     }
 
     //AuthenticationManager Bean 등록
@@ -39,8 +44,6 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
 
-
-
         //csrf disable
         http
                 .csrf((auth) -> auth.disable());
@@ -53,11 +56,13 @@ public class SecurityConfig {
         //경로별 인가 작업
         http
                 .authorizeHttpRequests((auth) -> auth
-                        .requestMatchers("/member/login", "/", "/member/join").permitAll()
+                        .requestMatchers("/login", "/", "/member/*").permitAll()
                         .requestMatchers("/admin").hasRole("ADMIN")
                         .anyRequest().authenticated());
         http
-                .addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration)), UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(new JwtFilter(jwtUtil), LoginFilter.class);
+        http
+                .addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration),jwtUtil), UsernamePasswordAuthenticationFilter.class);
         //세션 설정
         http
                 .sessionManagement((session) -> session
