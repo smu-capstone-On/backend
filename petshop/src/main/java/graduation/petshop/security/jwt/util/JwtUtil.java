@@ -23,7 +23,7 @@ public class JwtUtil{
      * 검증 함수
      * 내가 키에 로그인아이디밖에 안 넣어서
      */
-    public String getLoginId(String token) {
+    public String getUsername(String token) {
 
         return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().get("username", String.class);
     }

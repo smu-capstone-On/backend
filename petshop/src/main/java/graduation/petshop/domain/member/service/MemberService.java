@@ -4,6 +4,7 @@ import graduation.petshop.domain.member.dto.request.JoinDto;
 import graduation.petshop.domain.member.entity.Member;
 import graduation.petshop.domain.member.repository.MemberRepository;
 import graduation.petshop.security.jwt.dto.CustomUserDetails;
+import graduation.petshop.security.jwt.dto.UserPrincipal;
 import io.jsonwebtoken.security.Password;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;

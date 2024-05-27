@@ -3,12 +3,15 @@ package graduation.petshop.security.jwt.filter;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import graduation.petshop.domain.member.dto.request.LoginDto;
 import graduation.petshop.security.jwt.dto.CustomUserDetails;
+import graduation.petshop.security.jwt.dto.UserPrincipal;
 import graduation.petshop.security.jwt.util.JwtUtil;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletInputStream;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.catalina.User;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -54,8 +57,6 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         String loginId = loginDto.getLoginId();
         String password = loginDto.getPassword();
 
-        log.info("loginId : " + loginId);
-
         //검증을 위해서는 token에 담아야 함
         UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(loginId, password, null);
 
@@ -66,14 +67,14 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
     //로그인 성공시 실행하는 메소드
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authentication) {
-        CustomUserDetails customUserDetails = (CustomUserDetails) authentication.getPrincipal();
+        UserPrincipal customUserDetails = (UserPrincipal) authentication.getPrincipal();
 
+        log.info("로그인 성공");
         String loginId = customUserDetails.getUsername();
 
         String token = jwtUtil.createJwt(loginId, 60 * 60 * 1000L);
 
-        response.addHeader("Authorization", "Bearer "+token);
-
+        response.addCookie(createCookie("Authorization", token));
     }
 
     //로그인 실패시 실행하는 메소드
@@ -84,5 +85,15 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         log.info("로그인 실패");
     }
 
+    private Cookie createCookie(String key, String value){
+
+        Cookie cookie = new Cookie(key, value);
+        cookie.setMaxAge(60*60*60);
+        //cookie.setSecure(true);
+        cookie.setPath("/");
+        cookie.setHttpOnly(true);
+
+        return cookie;
+    }
 
 }

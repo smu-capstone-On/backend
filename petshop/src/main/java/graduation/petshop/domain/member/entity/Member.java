@@ -31,6 +31,10 @@ public class Member extends Base {
 
     private String password;
 
+    //카카오 로그인 시 인증을 위함
+    private String username;
+
+    //비밀번호 encoder
     public void passwordEncode(PasswordEncoder passwordEncoder) {
         this.password = passwordEncoder.encode(this.password);
     }

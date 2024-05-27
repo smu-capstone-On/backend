@@ -25,18 +25,7 @@ public class MemberController {
     private final MemberService memberService;
 
     /**
-     * 테스트 목적
-     */
-    @GetMapping("/test")
-    public String testObject(){
-        return "안뇽";
-    }
-
-
-
-    /**
      * 회원가입
-     * service에 회원가입 안 넣고 Controller에 넣었다.
      * 분리가 필요하다 생각함
      */
     @PostMapping("/member/join")

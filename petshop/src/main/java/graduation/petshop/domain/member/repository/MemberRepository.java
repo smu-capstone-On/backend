@@ -1,6 +1,7 @@
 package graduation.petshop.domain.member.repository;
 
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.NoResultException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
@@ -35,6 +36,19 @@ public class MemberRepository {
     public Optional<Member>  findByEmail(String email){
         return Optional.ofNullable(em.createQuery("select m from Member m where m.email = :email", Member.class).setParameter("email", email).getSingleResult());
     }
+    // 유저 이름으로 찾기
+    public Optional<Member>  findByUsername(String username){
+        try {
+            Member member = em.createQuery("select m from Member m where m.username = :username", Member.class)
+                    .setParameter("username", username)
+                    .getSingleResult();
+            return Optional.of(member);
+        } catch (NoResultException e) {
+            return Optional.empty();
+        }
+    }
+
+
     //전체 찾기
     public List<Member> findAll(){
         return em.createQuery("select m from Member m", Member.class).getResultList();
