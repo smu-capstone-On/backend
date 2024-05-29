@@ -1,5 +1,6 @@
 package graduation.petshop.domain.profile.service;
 
+import graduation.petshop.domain.member.repository.MemberRepository;
 import graduation.petshop.domain.profile.dto.request.JoinProfileDto;
 import graduation.petshop.domain.profile.dto.request.ModifyProfileDto;
 import graduation.petshop.domain.profile.entity.Profile;

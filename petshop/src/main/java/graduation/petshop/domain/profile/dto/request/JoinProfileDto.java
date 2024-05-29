@@ -22,15 +22,13 @@ public class JoinProfileDto {
     @NotBlank(message = "닉네임은 필수 항목입니다.")
     @Pattern(regexp = "^[ㄱ-ㅎ가-힣a-zA-Z0-9-_]{2,10}$", message = "닉네임는 특수문자를 제외한 4~10 자리여야 합니다.")
     private String nickName;
-
     @NotNull(message = "필수 입력 값입니다.")
     private Gender sex;
-
     @NotNull(message = "필수 입력 값입니다.")
     private Integer age;
-
     @NotNull(message = "필수 입력 값입니다.")
     private PetStatus petStatus;
+
 
     /* DTO -> Entity */
     public Profile toEntity() {
@@ -41,6 +39,4 @@ public class JoinProfileDto {
                 .petStatus(this.petStatus)
                 .build();
     }
-
-
 }

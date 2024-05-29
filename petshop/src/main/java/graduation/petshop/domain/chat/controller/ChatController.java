@@ -37,7 +37,7 @@ public class ChatController {
 
     @DeleteMapping("/chat/delete/{messageId}")
     public ResponseEntity<Void> deleteMessage(@PathVariable Long messageId) {
-        log.info("메시지 삭제 요청 - 메시지 ID: {}", messageId);
+        log.info("메시지 삭제  - 메시지 ID: {}", messageId);
         chatService.deleteMessage(messageId);
         return ResponseEntity.ok().build();
     }

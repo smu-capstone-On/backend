@@ -12,8 +12,6 @@ import graduation.petshop.domain.profile.repository.ProfileRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -26,6 +24,24 @@ public class ChatService {
     private final ProfileRepository profileRepository;
     private final ChatRoomRepository chatRoomRepository;
 
+
+
+    // 채팅 보내기.
+    @Transactional
+    public ChatMessageResponseDto sendMessage(final ChatMessageRequestDto requestDto, Long recipientId) {
+        Profile sender = profileRepository.findById(requestDto.getSenderId())
+                .orElseThrow(() -> new IllegalArgumentException("발신자의 프로필을 찾을 수 없습니다. 프로필 ID = " + requestDto.getSenderId()));
+
+        Profile recipient = profileRepository.findById(recipientId)
+                .orElseThrow(() -> new IllegalArgumentException("수신자의 프로필을 찾을 수 없습니다. 프로필 ID = " + recipientId));
+
+        ChatRoom chatRoom = findOrCreateChatRoom(sender, recipient);
+        ChatMessage chatMessage = requestDto.toEntity(sender, recipient, chatRoom);
+        ChatMessage savedMessage = chatMessageRepository.save(chatMessage);
+
+        return new ChatMessageResponseDto(savedMessage);
+    }
+
     @Transactional
     public ChatRoom findOrCreateChatRoom(Profile sender, Profile recipient) {
         return chatRoomRepository.findByUser1AndUser2(sender, recipient)
@@ -36,22 +52,6 @@ public class ChatService {
                             .build();
                     return chatRoomRepository.save(newChatRoom);
                 });
-    }
-
-    @Transactional
-    public ChatMessageResponseDto sendMessage(final ChatMessageRequestDto requestDto, Long recipientId) {
-        Profile sender = profileRepository.findById(requestDto.getSenderId())
-                .orElseThrow(() -> new IllegalArgumentException("발신자의 프로필을 찾을 수 없습니다. 프로필 ID = " + requestDto.getSenderId()));
-
-        Profile recipient = profileRepository.findById(recipientId)
-                .orElseThrow(() -> new IllegalArgumentException("수신자의 프로필을 찾을 수 없습니다. 프로필 ID = " + recipientId));
-
-        ChatRoom chatRoom = findOrCreateChatRoom(sender, recipient);
-
-        ChatMessage chatMessage = requestDto.toEntity(sender, recipient, chatRoom);
-
-        ChatMessage savedMessage = chatMessageRepository.save(chatMessage);
-        return new ChatMessageResponseDto(savedMessage);
     }
 
 
@@ -71,6 +71,7 @@ public class ChatService {
 
     @Transactional
     public void deleteChatRoom(Long chatRoomId) {
+
         chatRoomRepository.deleteById(chatRoomId);
     }
 
