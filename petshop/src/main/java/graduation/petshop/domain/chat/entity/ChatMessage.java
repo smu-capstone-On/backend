@@ -17,7 +17,7 @@ import java.time.LocalDateTime;
 public class ChatMessage {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "message_id")
     private Long id;
 
@@ -35,4 +35,7 @@ public class ChatMessage {
     @Column(updatable = false)
     private LocalDateTime timestamp; // 타임스탬프
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "room_id")
+    private ChatRoom chatRoom;
 }

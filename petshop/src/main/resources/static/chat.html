@@ -1,74 +1,114 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>1:1 Chat</title>
-    <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1.5.1/dist/sockjs.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/stompjs@2.3.3/lib/stomp.min.js"></script>
+    <title>WebSocket Chat Test</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.5.1/sockjs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
 </head>
 <body>
-<h1>1:1 Chat</h1>
+<h2>WebSocket Chat Test</h2>
 <div>
-    <select id="senderId">
-        <option value="1">Sender 1</option>
-        <option value="2">Sender 2</option>
-        <!-- Add more options as needed -->
-    </select>
-    <select id="recipientId">
-        <option value="1">Recipient 1</option>
-        <option value="2">Recipient 2</option>
-        <!-- Add more options as needed -->
-    </select>
-    <input type="text" id="message" placeholder="Message">
+    <input type="text" id="senderId" placeholder="Sender ID" />
+    <input type="text" id="recipientId" placeholder="Recipient ID" />
+    <input type="text" id="message" placeholder="Message" />
     <button onclick="sendMessage()">Send Message</button>
 </div>
 <div>
-    <h2>Received Messages:</h2>
-    <ul id="messages"></ul>
+    <input type="text" id="messageId" placeholder="Message ID" />
+    <button onclick="deleteMessage()">Delete Message</button>
 </div>
-
-<script>
-    var stompClient = null;
+<div>
+    <input type="text" id="userId" placeholder="User ID" />
+    <button onclick="getChatRoomsByUser()">Get Chat Rooms</button>
+</div>
+<div>
+    <input type="text" id="chatRoomId" placeholder="Chat Room ID" />
+    <button onclick="deleteChatRoom()">Delete Chat Room</button>
+</div>
+<div id="messages"></div>
+<div id="chatRooms"></div>
+<script type="text/javascript">
+    let stompClient = null;
 
     function connect() {
-        var socket = new SockJS('/stomp/chat');
+        const socket = new SockJS('/ws');
         stompClient = Stomp.over(socket);
         stompClient.connect({}, function (frame) {
             console.log('Connected: ' + frame);
-
-            // Subscribe to messages
-            var recipientId = document.getElementById('recipientId').value;
-            stompClient.subscribe('/user/' + recipientId + '/queue/messages', function (message) {
-                console.log("Received message:", message.body);
-                showMessage(JSON.parse(message.body));
+            const recipientId = document.getElementById('recipientId').value;
+            stompClient.subscribe('/user/' + recipientId + '/queue/messages', function (messageOutput) {
+                showMessage(JSON.parse(messageOutput.body));
             });
-        }, function (error) {
-            console.error('Connection error:', error);
         });
     }
 
     function sendMessage() {
-        var senderId = document.getElementById('senderId').value;
-        var recipientId = document.getElementById('recipientId').value;
-        var message = document.getElementById('message').value;
+        const senderId = document.getElementById('senderId').value;
+        const recipientId = document.getElementById('recipientId').value;
+        const message = document.getElementById('message').value;
+        const chatMessage = {
+            senderId: senderId,
+            recipientId: recipientId,
+            message: message
+        };
+        stompClient.send("/app/send/" + recipientId, {}, JSON.stringify(chatMessage));
+    }
 
-        if (stompClient && stompClient.connected) {
-            stompClient.send("/app/send", {}, JSON.stringify({
-                senderId: senderId,
-                recipientId: recipientId,
-                message: message
-            }));
-            console.log("Message sent:", message);
-        } else {
-            console.error('WebSocket is not connected.');
-        }
+    function deleteMessage() {
+        const messageId = document.getElementById('messageId').value;
+        fetch(`/chat/delete/${messageId}`, {
+            method: 'DELETE'
+        }).then(response => {
+            if (response.ok) {
+                console.log(`Message ID ${messageId} deleted`);
+            }
+        });
+    }
+
+    function getChatRoomsByUser() {
+        const userId = document.getElementById('userId').value;
+        fetch(`/chat/rooms/${userId}`)
+            .then(response => response.json())
+            .then(data => {
+                const chatRooms = document.getElementById('chatRooms');
+                chatRooms.innerHTML = '';
+                data.forEach(room => {
+                    const roomElement = document.createElement('div');
+                    roomElement.innerHTML = `Room ID: ${room.id}, User Nickname: ${room.userNickname} <button onclick="loadChatRoomMessages(${room.id})">Load Messages</button>`;
+                    chatRooms.appendChild(roomElement);
+                });
+            });
+    }
+
+    function deleteChatRoom() {
+        const chatRoomId = document.getElementById('chatRoomId').value;
+        fetch(`/chat/rooms/${chatRoomId}`, {
+            method: 'DELETE'
+        }).then(response => {
+            if (response.ok) {
+                console.log(`Chat Room ID ${chatRoomId} deleted`);
+            }
+        });
+    }
+
+    function loadChatRoomMessages(roomId) {
+        fetch(`/chat/rooms/${roomId}/messages`)
+            .then(response => response.json())
+            .then(data => {
+                const messages = document.getElementById('messages');
+                messages.innerHTML = '';
+                data.forEach(msg => {
+                    const messageElement = document.createElement('div');
+                    messageElement.appendChild(document.createTextNode(`${msg.senderNickName}: ${msg.message} (${msg.timestamp})`));
+                    messages.appendChild(messageElement);
+                });
+            });
     }
 
     function showMessage(message) {
-        var messages = document.getElementById('messages');
-        var messageElement = document.createElement('li');
-        messageElement.appendChild(document.createTextNode(message.senderNickName + ": " + message.message + " (" + message.timestamp + ")"));
+        const messages = document.getElementById('messages');
+        const messageElement = document.createElement('div');
+        messageElement.appendChild(document.createTextNode(message.senderNickName + ': ' + message.message + ' (' + message.timestamp + ')'));
         messages.appendChild(messageElement);
     }
 

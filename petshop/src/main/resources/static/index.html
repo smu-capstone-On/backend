@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>WebSocket Test</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.5.1/sockjs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+</head>
+<body>
+<h2>WebSocket Chat Test</h2>
+<div>
+    <input type="text" id="senderId" placeholder="Sender ID" />
+    <input type="text" id="recipientId" placeholder="Recipient ID" />
+    <input type="text" id="message" placeholder="Message" />
+    <button onclick="sendMessage()">Send Message</button>
+</div>
+<div id="messages"></div>
+<script type="text/javascript">
+    let stompClient = null;
+
+    function connect() {
+        const socket = new SockJS('/ws');
+        stompClient = Stomp.over(socket);
+        stompClient.connect({}, function (frame) {
+            console.log('Connected: ' + frame);
+            const recipientId = document.getElementById('recipientId').value;
+            stompClient.subscribe('/user/' + recipientId + '/queue/messages', function (messageOutput) {
+                showMessage(JSON.parse(messageOutput.body));
+            });
+        });
+    }
+
+    function sendMessage() {
+        const senderId = document.getElementById('senderId').value;
+        const recipientId = document.getElementById('recipientId').value;
+        const message = document.getElementById('message').value;
+        const chatMessage = {
+            senderId: senderId,
+            recipientId: recipientId,
+            message: message
+        };
+        stompClient.send("/app/send/" + recipientId, {}, JSON.stringify(chatMessage));
+    }
+
+    function showMessage(message) {
+        const messages = document.getElementById('messages');
+        const messageElement = document.createElement('div');
+        messageElement.appendChild(document.createTextNode(message.senderNickName + ': ' + message.message + ' (' + message.timestamp + ')'));
+        messages.appendChild(messageElement);
+    }
+
+    connect();
+</script>
+</body>
+</html>

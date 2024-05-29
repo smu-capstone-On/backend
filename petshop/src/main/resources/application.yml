@@ -16,7 +16,7 @@ spring:
 kakao:
   client_id: ff9ceddeab46bbdb2cd959ecdc4a8cf7
   client_secret : j0UiZukPsWR7OnSwoEmJWcpGC8LlJWvu
-  redirect_uri: http://localhost:8080/kakao/login
+  redirect_uri: http://localhost:8080/kakao/loginff
 
 
 
