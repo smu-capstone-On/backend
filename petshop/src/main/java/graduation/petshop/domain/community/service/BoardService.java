@@ -7,7 +7,7 @@ import graduation.petshop.domain.community.entity.Board;
 import graduation.petshop.domain.community.entity.Reply;
 import graduation.petshop.domain.community.repository.BoardRepository;
 import graduation.petshop.domain.community.repository.ReplyRepository;
-import graduation.petshop.domain.member.entity.Member;
+//import graduation.petshop.domain.member.entity.Member;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -27,7 +27,7 @@ public class BoardService {
         board.setContent(boardPostDto.getContent());
         board.setCreateDate(boardPostDto.getCreateDate());
         board.setCategory(boardPostDto.getCategory());
-//        board.setMember(memberService.displayNickname(boardPostDto.getMember())); 이걸 프로필로 해야하는건가
+        board.setProfile(boardPostDto.getProfile());
 
         return boardRepository.save(board).getBoardId();
     }
@@ -94,11 +94,11 @@ public class BoardService {
         }
     }
 
-    public void isPermission(Member member, String email) {
-        if (!member.getEmail().equals(email)) {
-            throw new BusinessLogicException(ExceptionCode.NO_PERMISSION);
-        }
-    }
+//    public void isPermission(Member member, String email) {
+//        if (!member.getEmail().equals(email)) {
+//            throw new BusinessLogicException(ExceptionCode.NO_PERMISSION);
+//        }
+//    }
 
 
 

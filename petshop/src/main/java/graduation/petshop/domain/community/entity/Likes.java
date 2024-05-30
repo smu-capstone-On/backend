@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import jakarta.persistence.Id;
+import org.springframework.security.core.parameters.P;
 
 @Entity(name = "likes") //이거 이름 안바꿔 주면 충돌남 SQL 예약어라서..
 @Setter @Getter

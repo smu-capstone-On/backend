@@ -3,6 +3,7 @@ package graduation.petshop.domain.community.controller;
 import graduation.petshop.domain.community.service.LikeService;
 import graduation.petshop.domain.member.entity.Member;
 import graduation.petshop.domain.member.service.MemberService;
+import graduation.petshop.domain.profile.entity.Profile;
 import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -27,7 +28,7 @@ public class LikeController {
         //이메일을 불러옴
         Member member = memberService.findIdByEmail(email);
         //id 랑 멤버 추가해 버림
-        likeService.addLike(boardId,member);
+        likeService.addLike(boardId, member);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 

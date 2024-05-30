@@ -1,5 +1,6 @@
 package graduation.petshop.domain.community.entity;
 
+import graduation.petshop.domain.member.entity.Member;
 import graduation.petshop.domain.profile.entity.Profile;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -44,9 +45,23 @@ public class Board {
 //    @JoinColumn(name = "communityImage_id")
 //    private CommunityImage communityImage;
 
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "profile_id")
-//    private Profile profile;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "profile_id")
+    private Profile profile;
+
+
+
+
+
+
+    
+//    private Member member = profile.getMember();  이걸 해야 합니다 여러분
+    /////////////////////근데 합쳐야해요
+
+
+
+
+
 
     private Integer LikeCount = 0;
 
