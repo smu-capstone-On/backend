@@ -32,13 +32,13 @@ public class BoardController {
 
     @PatchMapping("/{boardId}")
     public ResponseEntity patchBoard(@PathVariable("boardId")Long boardId,
-                                     @RequestBody @Validated BoardPatchDto boardPatchDto) {
-        boardService.updateBoard(boardPatchDto, boardId);
+                                     @RequestBody @Validated BoardPatchDto boardPatchDto) { // @AuthenticationPrincipal String email)
+        boardService.updateBoard(boardPatchDto, boardId); // boardId,email);
         return ResponseEntity.status(HttpStatus.OK).body(boardId);
     }
 
     @DeleteMapping("/{boardId}")
-    public ResponseEntity deleteBoard(@PathVariable("boardId") Long boardId) {
+    public ResponseEntity deleteBoard(@PathVariable("boardId") Long boardId) { //  @AuthenticationPrincipal String email) {
         boardService.deleteBoard(boardId);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }

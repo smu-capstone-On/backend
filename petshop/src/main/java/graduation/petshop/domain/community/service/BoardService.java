@@ -7,6 +7,7 @@ import graduation.petshop.domain.community.entity.Board;
 import graduation.petshop.domain.community.entity.Reply;
 import graduation.petshop.domain.community.repository.BoardRepository;
 import graduation.petshop.domain.community.repository.ReplyRepository;
+import graduation.petshop.domain.member.entity.Member;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -23,22 +24,30 @@ public class BoardService {
     public Long createBoard(BoardPostDto boardPostDto) {
         Board board = new Board();
         board.setTitle(boardPostDto.getTitle());
-        board.setContent(board.getContent());
+        board.setContent(boardPostDto.getContent());
+        board.setCreateDate(boardPostDto.getCreateDate());
+        board.setCategory(boardPostDto.getCategory());
+//        board.setMember(memberService.displayNickname(boardPostDto.getMember())); 이걸 프로필로 해야하는건가
 
         return boardRepository.save(board).getBoardId();
     }
 
-    public Long updateBoard(BoardPatchDto boardPatchDto, Long boardId) {
+    public Long updateBoard(BoardPatchDto boardPatchDto, Long boardId) { //,String email) {
         Board board = findBoardId(boardId);
+//        isPermission(board.getMember(),email);
         board.setTitle(boardPatchDto.getTitle());
         board.setContent(boardPatchDto.getContent());
+        board.setLastModifiedDate(boardPatchDto.getLastModifiedDate());
+        board.setCategory(boardPatchDto.getCategory());
 
         return boardRepository.save(board).getBoardId();
 
     }
 
-    public void deleteBoard(Long boardId) {
+    public void deleteBoard(Long boardId) { ////,String email) {
+        //        isPermission(board.getMember(),email);
         findBoardId(boardId);
+
         boardRepository.deleteById(boardId);
     }
 
@@ -55,6 +64,10 @@ public class BoardService {
     }
 
 
+
+
+
+
     public class BusinessLogicException extends RuntimeException{
 
         @Getter
@@ -67,9 +80,8 @@ public class BoardService {
     }
 
     public enum ExceptionCode {
-
-
-        BOARD_NOT_FOUND(400, "board not found");
+        BOARD_NOT_FOUND(400, "board not found"),
+        NO_PERMISSION(403, "don't have permission");
 
         @Getter
         private int status;
@@ -81,6 +93,14 @@ public class BoardService {
             this.message = message;
         }
     }
+
+    public void isPermission(Member member, String email) {
+        if (!member.getEmail().equals(email)) {
+            throw new BusinessLogicException(ExceptionCode.NO_PERMISSION);
+        }
+    }
+
+
 
 
     // 정적인데 변환 필요

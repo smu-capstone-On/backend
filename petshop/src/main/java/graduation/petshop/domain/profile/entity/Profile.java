@@ -2,10 +2,12 @@ package graduation.petshop.domain.profile.entity;
 import graduation.petshop.domain.member.entity.Member;
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.Setter;
 
 @Entity
 @Table(name = "profile")
 @Getter
+@Setter
 public class Profile {
 
     @Id @GeneratedValue

@@ -34,20 +34,21 @@ public class Board {
     @OneToMany(mappedBy = "board", cascade = {CascadeType.PERSIST,CascadeType.REMOVE})
     private List<Reply> reply = new ArrayList<>(); //댓글
 
-    private Integer commentCnt; //댓글 수
+//    private Integer commentCnt; //댓글 수
 
-    private LocalDateTime createDate;
+    private LocalDateTime createDate = LocalDateTime.now();
 
-    private LocalDateTime LastModifiedDate;
+    private LocalDateTime LastModifiedDate = LocalDateTime.now();
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "communityImage_id")
-    private CommunityImage communityImage;
+//    @OneToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "communityImage_id")
+//    private CommunityImage communityImage;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "profile_id")
-    private Profile profile;
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "profile_id")
+//    private Profile profile;
 
+    private Integer LikeCount = 0;
 
     //글 수정 비지니스 로직 추가.
 //    public void UpdateBoard(Long boardId, String title, String content) {
