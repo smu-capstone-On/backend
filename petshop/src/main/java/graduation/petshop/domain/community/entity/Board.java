@@ -39,7 +39,7 @@ public class Board {
 
     private LocalDateTime createDate = LocalDateTime.now();
 
-    private LocalDateTime LastModifiedDate = LocalDateTime.now();
+    private LocalDateTime LastModifiedDate = createDate;
 
 //    @OneToOne(fetch = FetchType.LAZY)
 //    @JoinColumn(name = "communityImage_id")
@@ -54,7 +54,7 @@ public class Board {
 
 
 
-    
+
 //    private Member member = profile.getMember();  이걸 해야 합니다 여러분
     /////////////////////근데 합쳐야해요
 

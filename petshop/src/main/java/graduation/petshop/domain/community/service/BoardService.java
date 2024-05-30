@@ -8,11 +8,14 @@ import graduation.petshop.domain.community.entity.Reply;
 import graduation.petshop.domain.community.repository.BoardRepository;
 import graduation.petshop.domain.community.repository.ReplyRepository;
 //import graduation.petshop.domain.member.entity.Member;
+import graduation.petshop.domain.member.entity.Member;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
 
 
 @Service
@@ -26,19 +29,21 @@ public class BoardService {
         board.setTitle(boardPostDto.getTitle());
         board.setContent(boardPostDto.getContent());
         board.setCreateDate(boardPostDto.getCreateDate());
+        board.setLastModifiedDate(boardPostDto.getLastModifiedDate());
         board.setCategory(boardPostDto.getCategory());
         board.setProfile(boardPostDto.getProfile());
 
         return boardRepository.save(board).getBoardId();
     }
 
-    public Long updateBoard(BoardPatchDto boardPatchDto, Long boardId) { //,String email) {
+    public Long updateBoard(BoardPatchDto boardPatchDto, Long boardId,String email) {
         Board board = findBoardId(boardId);
-//        isPermission(board.getMember(),email);
+        isPermission(board.getMember(),email);
         board.setTitle(boardPatchDto.getTitle());
         board.setContent(boardPatchDto.getContent());
-        board.setLastModifiedDate(boardPatchDto.getLastModifiedDate());
+        board.setLastModifiedDate(LocalDateTime.now());
         board.setCategory(boardPatchDto.getCategory());
+        board.setProfile(boardPatchDto.getProfile());
 
         return boardRepository.save(board).getBoardId();
 
@@ -94,11 +99,11 @@ public class BoardService {
         }
     }
 
-//    public void isPermission(Member member, String email) {
-//        if (!member.getEmail().equals(email)) {
-//            throw new BusinessLogicException(ExceptionCode.NO_PERMISSION);
-//        }
-//    }
+    public void isPermission(Member member, String email) {
+        if (!member.getEmail().equals(email)) {
+            throw new BusinessLogicException(ExceptionCode.NO_PERMISSION);
+        }
+    }
 
 
 
