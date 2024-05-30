@@ -4,10 +4,7 @@ import graduation.petshop.domain.community.dto.BoardPatchDto;
 import graduation.petshop.domain.community.dto.BoardPostDto;
 import graduation.petshop.domain.community.dto.BoardResponseDto;
 import graduation.petshop.domain.community.entity.Board;
-import graduation.petshop.domain.community.entity.Reply;
 import graduation.petshop.domain.community.repository.BoardRepository;
-import graduation.petshop.domain.community.repository.ReplyRepository;
-//import graduation.petshop.domain.member.entity.Member;
 import graduation.petshop.domain.member.entity.Member;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -39,6 +36,7 @@ public class BoardService {
     public Long updateBoard(BoardPatchDto boardPatchDto, Long boardId,String email) {
         Board board = findBoardId(boardId);
         isPermission(board.getMember(),email);
+
         board.setTitle(boardPatchDto.getTitle());
         board.setContent(boardPatchDto.getContent());
         board.setLastModifiedDate(LocalDateTime.now());
@@ -46,13 +44,13 @@ public class BoardService {
         board.setProfile(boardPatchDto.getProfile());
 
         return boardRepository.save(board).getBoardId();
-
     }
 
-    public void deleteBoard(Long boardId) { ////,String email) {
-        //        isPermission(board.getMember(),email);
-        findBoardId(boardId);
+    public void deleteBoard(Long boardId,String email) {
+        Board board = findBoardId(boardId);
+        isPermission(board.getMember(),email);
 
+        findBoardId(boardId);
         boardRepository.deleteById(boardId);
     }
 

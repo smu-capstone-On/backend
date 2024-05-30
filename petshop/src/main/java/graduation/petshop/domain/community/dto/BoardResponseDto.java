@@ -3,7 +3,6 @@ package graduation.petshop.domain.community.dto;
 import graduation.petshop.domain.community.entity.Board;
 import graduation.petshop.domain.community.entity.Category;
 import graduation.petshop.domain.profile.entity.Profile;
-import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;

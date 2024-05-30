@@ -3,16 +3,15 @@ package graduation.petshop.domain.community.controller;
 import graduation.petshop.domain.community.service.LikeService;
 import graduation.petshop.domain.member.entity.Member;
 import graduation.petshop.domain.member.service.MemberService;
-import graduation.petshop.domain.profile.entity.Profile;
 import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 
 @RestController
 @RequestMapping("/api/likes")

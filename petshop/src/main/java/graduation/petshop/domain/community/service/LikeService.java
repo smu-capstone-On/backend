@@ -5,7 +5,6 @@ import graduation.petshop.domain.community.entity.Likes;
 import graduation.petshop.domain.community.repository.BoardRepository;
 import graduation.petshop.domain.community.repository.LikeRepository;
 import graduation.petshop.domain.member.entity.Member;
-import graduation.petshop.domain.profile.entity.Profile;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

@@ -3,6 +3,7 @@ package graduation.petshop.domain.community.entity;
 import graduation.petshop.domain.member.entity.Member;
 import graduation.petshop.domain.profile.entity.Profile;
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -32,13 +33,17 @@ public class Board {
 
     private String content; //본문
 
+
+    @Builder.Default
     @OneToMany(mappedBy = "board", cascade = {CascadeType.PERSIST,CascadeType.REMOVE})
     private List<Reply> reply = new ArrayList<>(); //댓글
 
 //    private Integer commentCnt; //댓글 수
 
+    @Builder.Default
     private LocalDateTime createDate = LocalDateTime.now();
 
+    @Builder.Default
     private LocalDateTime LastModifiedDate = createDate;
 
 //    @OneToOne(fetch = FetchType.LAZY)
@@ -50,12 +55,8 @@ public class Board {
     private Profile profile;
 
 
-
-
-
-
-
-//    private Member member = profile.getMember();  이걸 해야 합니다 여러분
+    @Builder.Default
+    private Member member = profile.getMember();  //이걸 해야 합니다 여러분
     /////////////////////근데 합쳐야해요
 
 
@@ -63,6 +64,7 @@ public class Board {
 
 
 
+    @Builder.Default
     private Integer LikeCount = 0;
 
     //글 수정 비지니스 로직 추가.

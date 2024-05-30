@@ -12,6 +12,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,6 +25,7 @@ public class BoardController {
 
     private final BoardService boardService;
 
+
     @PostMapping
     public ResponseEntity postBoard(@RequestBody @Validated BoardPostDto boardPostDto) {
         Long boardId = boardService.createBoard(boardPostDto);
@@ -32,14 +34,14 @@ public class BoardController {
 
     @PatchMapping("/{boardId}")
     public ResponseEntity patchBoard(@PathVariable("boardId")Long boardId,
-                                     @RequestBody @Validated BoardPatchDto boardPatchDto) { // @AuthenticationPrincipal String email)
-        boardService.updateBoard(boardPatchDto, boardId); // boardId,email);
+                                     @RequestBody @Validated BoardPatchDto boardPatchDto, @AuthenticationPrincipal String email){
+        boardService.updateBoard(boardPatchDto, boardId, email);
         return ResponseEntity.status(HttpStatus.OK).body(boardId);
     }
 
     @DeleteMapping("/{boardId}")
-    public ResponseEntity deleteBoard(@PathVariable("boardId") Long boardId) { //  @AuthenticationPrincipal String email) {
-        boardService.deleteBoard(boardId);
+    public ResponseEntity deleteBoard(@PathVariable("boardId") Long boardId,  @AuthenticationPrincipal String email) {
+        boardService.deleteBoard(boardId, email);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 

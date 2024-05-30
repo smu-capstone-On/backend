@@ -3,7 +3,6 @@ package graduation.petshop.domain.community.repository;
 import graduation.petshop.domain.community.entity.Board;
 import graduation.petshop.domain.community.entity.Likes;
 import graduation.petshop.domain.member.entity.Member;
-import graduation.petshop.domain.profile.entity.Profile;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
