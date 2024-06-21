@@ -15,9 +15,7 @@ import org.springframework.messaging.simp.stomp.StompFrameHandler;
 import org.springframework.messaging.simp.stomp.StompHeaders;
 import org.springframework.messaging.simp.stomp.StompSession;
 import org.springframework.messaging.simp.stomp.StompSessionHandlerAdapter;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.web.socket.WebSocketHttpHeaders;
-import org.springframework.web.socket.client.standard.StandardWebSocketClient;
 import org.springframework.web.socket.messaging.WebSocketStompClient;
 
 import java.lang.reflect.Type;
@@ -53,12 +51,12 @@ public class ChatControllerTest {
         ChatMessageResponseDto expectedResponse = new ChatMessageResponseDto();
         expectedResponse.setMessage("Hello");
 
-        Mockito.when(chatService.sendMessage(Mockito.any(ChatMessageRequestDto.class), Mockito.eq(2L)))
+        Mockito.when(chatService.sendMessage(Mockito.any(ChatMessageRequestDto.class)))
                 .thenReturn(expectedResponse);
 
         BlockingQueue<ChatMessageResponseDto> blockingQueue = new ArrayBlockingQueue<>(1);
 
-        this.stompSession.subscribe("/user/1/queue/messages", new StompFrameHandler() {
+        this.stompSession.subscribe("/user/2/queue/messages", new StompFrameHandler() {
             @Override
             public Type getPayloadType(StompHeaders headers) {
                 return ChatMessageResponseDto.class;
@@ -70,7 +68,7 @@ public class ChatControllerTest {
             }
         });
 
-        this.stompSession.send("/app/chat/send/2", requestDto);
+        this.stompSession.send("/app/send/2", requestDto);
 
         ChatMessageResponseDto response = blockingQueue.poll(5, TimeUnit.SECONDS);
         assertThat(response).isNotNull();

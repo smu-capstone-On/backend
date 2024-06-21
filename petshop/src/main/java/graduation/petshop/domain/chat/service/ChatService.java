@@ -28,12 +28,12 @@ public class ChatService {
 
     // 채팅 보내기.
     @Transactional
-    public ChatMessageResponseDto sendMessage(final ChatMessageRequestDto requestDto, Long recipientId) {
+    public ChatMessageResponseDto sendMessage(final ChatMessageRequestDto requestDto) {
         Profile sender = profileRepository.findById(requestDto.getSenderId())
                 .orElseThrow(() -> new IllegalArgumentException("발신자의 프로필을 찾을 수 없습니다. 프로필 ID = " + requestDto.getSenderId()));
 
-        Profile recipient = profileRepository.findById(recipientId)
-                .orElseThrow(() -> new IllegalArgumentException("수신자의 프로필을 찾을 수 없습니다. 프로필 ID = " + recipientId));
+        Profile recipient = profileRepository.findById(requestDto.getRecipientId())
+                .orElseThrow(() -> new IllegalArgumentException("수신자의 프로필을 찾을 수 없습니다. 프로필 ID = " + requestDto.getRecipientId()));
 
         ChatRoom chatRoom = findOrCreateChatRoom(sender, recipient);
         ChatMessage chatMessage = requestDto.toEntity(sender, recipient, chatRoom);
