@@ -67,14 +67,14 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
     //로그인 성공시 실행하는 메소드
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authentication) {
-        UserPrincipal customUserDetails = (UserPrincipal) authentication.getPrincipal();
+        CustomUserDetails customUserDetails = (CustomUserDetails) authentication.getPrincipal();
 
         log.info("로그인 성공");
         String loginId = customUserDetails.getUsername();
 
         String token = jwtUtil.createJwt(loginId, 60 * 60 * 1000L);
 
-        response.addCookie(createCookie("Authorization", token));
+        response.addHeader("Authorization", "Bearer " + token);
     }
 
     //로그인 실패시 실행하는 메소드

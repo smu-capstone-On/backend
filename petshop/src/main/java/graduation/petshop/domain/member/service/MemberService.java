@@ -30,7 +30,7 @@ public class MemberService implements UserDetailsService {
      * 여기서 중복조회 하는게 더 낫나?
      */
     @Transactional
-    public void join(JoinDto joinDto) {
+    public Long join(JoinDto joinDto) {
         Member member = joinDto.toEntity(
                 joinDto.getLoginId(),
                 joinDto.getPassword(),
@@ -38,6 +38,7 @@ public class MemberService implements UserDetailsService {
         );
         member.passwordEncode(passwordEncoder);
         memberRepository.save(member);
+        return member.getId();
     }
 
 

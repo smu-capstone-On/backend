@@ -31,8 +31,8 @@ public class MemberController {
     @PostMapping("/member/join")
     public ResponseEntity<Object> memberJoin(@RequestBody @Valid JoinDto joinDto){
         log.info("회원가입 완료");
-        memberService.join(joinDto);
-        return ResponseEntity.ok("ok");
+        Long joined = memberService.join(joinDto);
+        return ResponseEntity.ok(joined);
     }
 
     /**

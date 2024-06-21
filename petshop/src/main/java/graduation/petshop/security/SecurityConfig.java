@@ -93,9 +93,6 @@ public class SecurityConfig {
         http
                 .httpBasic((auth)-> auth.disable());
 
-        //JWTFilter추가
-        http
-                .addFilterBefore(new JwtFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class);
         //Oauth2
 //        http
 //                .oauth2Login((oauth2) -> oauth2
@@ -105,8 +102,11 @@ public class SecurityConfig {
         //경로별 인가 작업
         http
                 .authorizeHttpRequests((auth) -> auth
-                        .requestMatchers("/","/member/*").permitAll()
+                        .requestMatchers("/test","/member/*","profiles/*").permitAll()
                         .anyRequest().authenticated());
+        //JWTFilter추가
+        http
+                .addFilterBefore(new JwtFilter(jwtUtil), LoginFilter.class);
 
         //일반 로그인 필터
         http

@@ -10,6 +10,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
 
+/**
+ * 일단 안 씀
+ */
 public class UserPrincipal implements UserDetails, OAuth2User {
 
     private Member member;

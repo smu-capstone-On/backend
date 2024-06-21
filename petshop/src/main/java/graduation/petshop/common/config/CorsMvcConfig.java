@@ -5,7 +5,6 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 public class CorsMvcConfig implements WebMvcConfigurer {
 
-
         //프론트단 포트번호가 바뀌면 바꾸면 된다.
         @Override
         public void addCorsMappings(CorsRegistry corsRegistry) {

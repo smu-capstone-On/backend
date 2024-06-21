@@ -6,8 +6,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class OAuthContorller {
 
-    @RequestMapping("/kakao")
+    @RequestMapping("/test")
     public String kakaoOAuth(){
-        return "안뇽";
+        return "서버 배포 완료";
     }
 }
