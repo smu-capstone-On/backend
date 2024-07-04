@@ -1,46 +1,67 @@
 package graduation.petshop.domain.profile.entity;
+import graduation.petshop.domain.chat.entity.ChatMessage;
+import graduation.petshop.domain.community.entity.Board;
+import graduation.petshop.domain.community.entity.Comment;
 import graduation.petshop.domain.member.entity.Member;
 import jakarta.persistence.*;
 import lombok.Getter;
-import lombok.Setter;
+import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
+
+import java.util.List;
 
 @Entity
-@Table(name = "profile")
 @Getter
-@Setter
+@SuperBuilder
+@NoArgsConstructor
 public class Profile {
 
-    @Id @GeneratedValue
+    @Id
+    @GeneratedValue
     @Column(name = "profile_id")
     private Long id;
 
+    @Column(nullable = false)
     private String nickName;
 
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private Gender sex; // 성별 [FEMALE, MALE]
 
     @Enumerated(EnumType.STRING)
-    private PetStatus petStatus; // 반려동물 유무 [PETYES, PETNO]
+    @Column(nullable = false)
+    private PetStatus petStatus; // 산책반려동물 유무 [PETYES, PETNO]
 
+    @Column(nullable = false)
     private Integer age;
 
-    
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "profileImage_id")
+    private ProfileImage profileImage;
 
-    public void setNickName(String nickName) {
+    // Member 엔티티와의 양방향 일대일 관계 설정
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id")
+    private Member member;
+
+    @OneToMany(mappedBy = "profile",orphanRemoval=true)
+    private List<Board> board;
+
+    @OneToMany(mappedBy = "profile",orphanRemoval = true)
+    private List<Comment> comment;
+
+    @OneToMany(mappedBy = "sender")
+    private List<ChatMessage> sentMessages;
+
+    @OneToMany(mappedBy = "recipient")
+    private List<ChatMessage> receivedMessages;
+
+    /* 닉네임 수정 로직*/
+    public void modify(String nickName, PetStatus petStatus) {
+
         this.nickName = nickName;
-    }
-
-    public void setSex(Gender sex) {
-        this.sex = sex;
-    }
-
-    public void setAge(Integer age) {
-        this.age = age;
-    }
-
-    public void setPetStatus(PetStatus petStatus){
         this.petStatus = petStatus;
+
     }
 
 }
-

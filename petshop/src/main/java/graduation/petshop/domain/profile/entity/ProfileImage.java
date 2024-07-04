@@ -1,15 +1,17 @@
-package graduation.petshop.domain.community.entity;
+package graduation.petshop.domain.profile.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.experimental.SuperBuilder;
 
 @Entity
-@Getter
-@SuperBuilder
+@AllArgsConstructor
 @NoArgsConstructor
-public class CommunityImage {
+@Builder
+@Getter
+public class ProfileImage {
 
     @Id
     @GeneratedValue
@@ -18,6 +20,6 @@ public class CommunityImage {
     private String originalFilename; //원본 파일명
     private String saveFilename; //서버에 저장된 파일명
 
-    @OneToOne(mappedBy = "communityImage",fetch = FetchType.LAZY)
-    private Board board;
+    @OneToOne(mappedBy = "profileImage",fetch = FetchType.LAZY)
+    private Profile profile;
 }
