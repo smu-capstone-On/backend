@@ -27,18 +27,22 @@ public class BoardController {
     private final BoardService boardService;
 
 
+    //계시물 작성
     @PostMapping
     public ResponseEntity postBoard(@RequestBody @Validated BoardPostDto boardPostDto, @ModelAttribute BoardImageUploadDto boardImageUploadDto) {
         Long boardId = boardService.createBoard(boardPostDto, boardImageUploadDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(boardId);
     }
 
+    //계시물 수정
     @PatchMapping("/{boardId}")
     public ResponseEntity patchBoard(@PathVariable("boardId")Long boardId,
                                      @RequestBody @Validated BoardPatchDto boardPatchDto, @ModelAttribute BoardImageUploadDto boardImageUploadDto, @AuthenticationPrincipal String email){
         boardService.updateBoard(boardPatchDto, boardId, email, boardImageUploadDto);
         return ResponseEntity.status(HttpStatus.OK).body(boardId);
     }
+
+    //계시물 삭제
 
     @DeleteMapping("/{boardId}")
     public ResponseEntity deleteBoard(@PathVariable("boardId") Long boardId,  @AuthenticationPrincipal String email) {
@@ -47,12 +51,14 @@ public class BoardController {
     }
 
 
+    //계시물 하나 보기
     @GetMapping("/{boardId}")
     public ResponseEntity getBoard(@PathVariable("boardId") Long boardId) {
         BoardResponseDto boardResponseDto = boardService.findByBoardId(boardId);
         return ResponseEntity.status(HttpStatus.OK).body(boardResponseDto);
     }
 
+    //게시물 여러개 보기 (몇개씩 볼지 수정 가능)
     @GetMapping
     public ResponseEntity<Page<BoardResponseDto>> getAllBoards(
             @RequestParam(value = "page",defaultValue = "1")int page,

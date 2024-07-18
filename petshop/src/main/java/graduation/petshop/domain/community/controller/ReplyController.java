@@ -22,11 +22,8 @@ import org.springframework.web.bind.annotation.*;
 public class ReplyController {
     private final ReplyService replyService;
 
-//    public ResponseEntity postBoard(@RequestBody @Validated BoardPostDto boardPostDto) {
-//        Long boardId = boardService.createBoard(boardPostDto);
-//        return ResponseEntity.status(HttpStatus.CREATED).body(boardId);
-//    }
 
+    //댓글 작성
     public ResponseEntity postReply(@PathVariable("boardId")Long boardId,
                                     @RequestBody @Validated ReplyPostDto replyPostDto, @AuthenticationPrincipal String email){
         Long replyId = replyService.writeReply(replyPostDto, boardId, email);
@@ -34,33 +31,24 @@ public class ReplyController {
     }
 
 
-//
-//    @PatchMapping("/{boardId}")
-//    public ResponseEntity patchBoard(@PathVariable("boardId")Long boardId,
-//                                     @RequestBody @Validated BoardPatchDto boardPatchDto, @AuthenticationPrincipal String email){
-//        boardService.updateBoard(boardPatchDto, boardId, email);
-//        return ResponseEntity.status(HttpStatus.OK).body(boardId);
-//    }
 
+    //댓글 수정
     @PatchMapping
     public ResponseEntity updateReply(@PathVariable("replyId")Long replyId,
                                       @RequestBody @Validated ReplyPatchDto replyPatchDto, @AuthenticationPrincipal String email){
         replyService.updateReply(replyPatchDto, replyId, email);
         return ResponseEntity.status(HttpStatus.OK).body(replyId);
     }
-//
-//    @DeleteMapping("/{boardId}")
-//    public ResponseEntity deleteBoard(@PathVariable("boardId") Long boardId,  @AuthenticationPrincipal String email) {
-//        boardService.deleteBoard(boardId, email);
-//        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-//    }
 
+    //댓글 삭제
     @DeleteMapping
     public ResponseEntity deleteReply(@PathVariable("replyId")Long replyId,@AuthenticationPrincipal String email ){
         replyService.deleteReply(replyId, email);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
+
+    //모든 댓글 가져오기
     @GetMapping("{boardId}")
     public ResponseEntity<Page<ReplyResponseDto>> getAllReply(
             @PathVariable("boardId") Long boardId,

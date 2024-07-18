@@ -33,9 +33,11 @@ public class BoardService {
     private final BoardRepository boardRepository;
     private final BoardImageRepository boardImageRepository;
 
+    //기본 저장 폴더 위치를 모르겠어서 일단 해 놓음
     @Value("${file.path}")
     private String uploadFolder;
 
+    //보드 생성
     public Long createBoard(BoardPostDto boardPostDto, BoardImageUploadDto boardImageUploadDto) {
         Board result = Board.builder()
                 .title(boardPostDto.getTitle())
@@ -48,7 +50,7 @@ public class BoardService {
 
         boardRepository.save(result);
 
-        // 이 부분 추가
+        // 폴더 추가 부분
         if (boardImageUploadDto.getFiles() != null && !boardImageUploadDto.getFiles().isEmpty()) {
             for (MultipartFile file : boardImageUploadDto.getFiles()) {
                 UUID uuid = UUID.randomUUID();
@@ -107,6 +109,7 @@ public class BoardService {
 //        return boardRepository.save(board).getBoardId();
     }
 
+    //보드 수정
     public Long updateBoard(BoardPatchDto boardPatchDto, Long boardId,String email, @ModelAttribute BoardImageUploadDto boardImageUploadDto) {
         Board board = findBoardId(boardId);
         isPermission(board.getMember(),email);
@@ -121,6 +124,8 @@ public class BoardService {
         return boardRepository.save(board).getBoardId();
     }
 
+    //보드 삭제
+
     public void deleteBoard(Long boardId,String email) {
         Board board = findBoardId(boardId);
         isPermission(board.getMember(),email);
@@ -134,7 +139,7 @@ public class BoardService {
 
 
 
-    //
+    //하나의 보드 찾기
 
     public Board findBoardId(Long boardId) {
         return boardRepository.findById(boardId)
@@ -145,7 +150,7 @@ public class BoardService {
 
 
 
-
+    //예외처리 부분
     public class BusinessLogicException extends RuntimeException{
 
         @Getter
@@ -172,6 +177,7 @@ public class BoardService {
         }
     }
 
+    //본인이 작성한 것인지 확인하는 부분
     public void isPermission(Member member, String email) {
         if (!member.getEmail().equals(email)) {
             throw new BusinessLogicException(ExceptionCode.NO_PERMISSION);
@@ -180,13 +186,7 @@ public class BoardService {
 
 
 
-
-    // 정적인데 변환 필요
-
-
-
-
-
+    //보드의 아이디로 보드 찾기
     public BoardResponseDto findByBoardId(Long boardId) {
 
         Board board = findBoardId(boardId);
@@ -194,6 +194,7 @@ public class BoardService {
     }
 
 
+    //모든 보드 보여주기
     public Page<BoardResponseDto> findAllBoards(Pageable pageable) {
         Page<Board> boards = boardRepository.findAll(pageable);
         return boards.map(BoardResponseDto::FindFromBoard); //board -> BoardResponseDto.FindFromBoard(board)

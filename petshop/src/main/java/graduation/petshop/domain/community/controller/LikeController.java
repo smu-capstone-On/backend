@@ -22,6 +22,8 @@ public class LikeController {
     private final LikeService likeService;
     private final MemberService memberService;
 
+
+    //좋아요 수 늘리기
     @PostMapping("up/{boardId}")
     public ResponseEntity addLike(@PathVariable("boardId")@Positive Long boardId,
                                   @AuthenticationPrincipal String email ) {

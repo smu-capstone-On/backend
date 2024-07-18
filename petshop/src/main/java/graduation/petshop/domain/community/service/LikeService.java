@@ -19,6 +19,8 @@ public class LikeService {
     private final BoardRepository boardRepository;
     private final LikeRepository likeRepository;
 
+    //좋아요 추가
+
     public void addLike(Long boardId, Member member) {
 
         Board board = boardService.findBoardId(boardId);

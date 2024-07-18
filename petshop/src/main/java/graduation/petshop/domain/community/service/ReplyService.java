@@ -27,6 +27,7 @@ public class ReplyService {
     private final MemberRepository memberRepository;
     private final ReplyRepository replyRepository;
 
+    // 댓글 작성
     public Long writeReply(ReplyPostDto replyPostDto, Long boardId, String email) {
         Member member = memberRepository.findByEmail(email);
         Board board = boardRepository.findById(boardId).orElseThrow(() -> new IllegalArgumentException("게시물을 찾을 수 없습니다."));
@@ -39,6 +40,7 @@ public class ReplyService {
         return replyRepository.save(reply).getReplyId();
     }
 
+    //댓글 업데이트
     public Long updateReply(ReplyPatchDto replyPatchDto, Long replyId, String email) {
 
         Reply reply = replyRepository.findById(replyId).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 댓글입니다."));
@@ -49,6 +51,7 @@ public class ReplyService {
         return replyRepository.save(reply).getReplyId();
     }
 
+    //댓글 삭제
     public void deleteReply(Long replyId, String email) {
 
         Reply reply = replyRepository.findById(replyId).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 댓글입니다."));
@@ -57,6 +60,7 @@ public class ReplyService {
         replyRepository.deleteById(replyId);
     }
 
+    //댓글 모두 보여주기
 
     public Page<ReplyResponseDto> findAllReply(Pageable pageable, Long boardId) {
         Board board = boardService.findBoardId(boardId);
