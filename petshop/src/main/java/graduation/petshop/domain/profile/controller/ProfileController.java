@@ -4,7 +4,6 @@ package graduation.petshop.domain.profile.controller;
 import graduation.petshop.domain.profile.dto.request.JoinProfileDto;
 import graduation.petshop.domain.profile.dto.request.ModifyProfileDto;
 import graduation.petshop.domain.profile.dto.response.FindMyProfileDto;
-import graduation.petshop.domain.profile.entity.PetStatus;
 import graduation.petshop.domain.profile.entity.Profile;
 import graduation.petshop.domain.profile.service.ProfileService;
 import lombok.RequiredArgsConstructor;
@@ -24,16 +23,15 @@ public class ProfileController {
 
     // POST -> 프로필 생성 메소드
     @PostMapping("/{memberId}")
-    public ResponseEntity<Long> createProfile(@PathVariable Long memberId, @RequestBody @Validated JoinProfileDto joinProfileDto) {
+    public ResponseEntity<Long> createProfile(@PathVariable("memberId") Long memberId, @RequestBody @Validated JoinProfileDto joinProfileDto) {
         log.info("프로필 생성 {}", memberId);
 
         // 프로필 생성 메소드 호출하여 프로필 저장 후 ID 반환
-        Long profileId = profileService.join(joinProfileDto);
+        Long profileId = profileService.join(memberId,joinProfileDto);
 
         // 생성된 프로필의 ID를 반환
         return ResponseEntity.ok(profileId);
     }
-
 
     // PUT -> 프로필 수정 메소드
     @PutMapping("/{profileId}")
@@ -46,8 +44,6 @@ public class ProfileController {
         // 수정 성공 시 204 No Content 상태코드 반환
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
-
-
 
     // 마이페이지로 이동예정 GET -> 프로필 조회 메소드
 
@@ -68,6 +64,5 @@ public class ProfileController {
             return ResponseEntity.notFound().build();
         }
     }
+
 }
-
-

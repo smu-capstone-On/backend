@@ -1,20 +1,27 @@
 package graduation.petshop.domain.profile.entity;
-import graduation.petshop.domain.chat.entity.ChatMessage;
-import graduation.petshop.domain.community.entity.Board;
-import graduation.petshop.domain.community.entity.Comment;
+
+import graduation.petshop.common.entity.Base;
 import graduation.petshop.domain.member.entity.Member;
+import graduation.petshop.domain.profile.dto.request.JoinProfileDto;
+import graduation.petshop.domain.walk.entity.Walk;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.experimental.SuperBuilder;
+import org.hibernate.mapping.Join;
+import org.springframework.data.annotation.Id;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Getter
+@Setter
 @SuperBuilder
 @NoArgsConstructor
-public class Profile {
+public class Profile extends Base {
+
 
     @Id
     @GeneratedValue
@@ -44,24 +51,35 @@ public class Profile {
     @JoinColumn(name = "member_id")
     private Member member;
 
-    @OneToMany(mappedBy = "profile",orphanRemoval=true)
-    private List<Board> board;
+    @OneToMany(mappedBy = "profile", cascade = CascadeType.ALL)
+    private List<Walk> walk = new ArrayList<>();
 
-    @OneToMany(mappedBy = "profile",orphanRemoval = true)
-    private List<Comment> comment;
-
-    @OneToMany(mappedBy = "sender")
-    private List<ChatMessage> sentMessages;
-
-    @OneToMany(mappedBy = "recipient")
-    private List<ChatMessage> receivedMessages;
 
     /* 닉네임 수정 로직*/
     public void modify(String nickName, PetStatus petStatus) {
-
         this.nickName = nickName;
         this.petStatus = petStatus;
-
     }
+
+    public void setMember(Member member) {
+        this.member = member;
+        member.setProfile(this);
+    }
+
+    /**
+     * 프로필 생성 메소드
+     */
+    public static Profile createProfile(Member member, JoinProfileDto joinProfileDto){
+        Profile profile = new Profile();
+
+        profile.setMember(member);
+        profile.setNickName(joinProfileDto.getNickName());
+        profile.setSex(joinProfileDto.getSex());
+        profile.setAge(joinProfileDto.getAge());
+        profile.setPetStatus(joinProfileDto.getPetStatus());
+
+        return profile;
+    }
+
 
 }

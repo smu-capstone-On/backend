@@ -1,3 +1,4 @@
+
 package graduation.petshop.domain.chat.controller;
 
 import graduation.petshop.domain.chat.dto.request.ChatMessageRequestDto;
@@ -29,35 +30,35 @@ public class ChatController {
 
     @MessageMapping("/send/{roomId}")
     public void sendMessage(@PathVariable String roomId, @Payload ChatMessageRequestDto requestDto) {
-        ChatMessageResponseDto responseDto = chatService.sendMessage(requestDto);
+        ChatMessageResponseDto responseDto = chatService.sendMessage(requestDto, requestDto.getRecipientId());
         messagingTemplate.convertAndSendToUser(String.valueOf(requestDto.getRecipientId()), "/queue/messages", responseDto);
+
         log.info("Message sent to room {}: {}", roomId, responseDto.toString());
     }
 
     @DeleteMapping("/chat/delete/{messageId}")
     public ResponseEntity<Void> deleteMessage(@PathVariable Long messageId) {
-        log.info("Message delete request - Message ID: {}", messageId);
+        log.info("메시지 삭제  - 메시지 ID: {}", messageId);
         chatService.deleteMessage(messageId);
         return ResponseEntity.ok().build();
     }
 
     @GetMapping("/chat/rooms/{userId}")
     public ResponseEntity<List<ChatRoomDto>> getChatRoomsByUser(@PathVariable Long userId) {
-        log.info("Chat room fetch request - User ID: {}", userId);
+        log.info("채팅방 조회 요청 - 사용자 ID: {}", userId);
         List<ChatRoomDto> chatRooms = chatService.getChatRoomsByUser(userId);
         return ResponseEntity.ok(chatRooms);
     }
 
     @GetMapping("/chat/rooms/{roomId}/messages")
     public ResponseEntity<List<ChatMessageResponseDto>> getMessagesByRoom(@PathVariable Long roomId) {
-        log.info("Chat room messages fetch request - Room ID: {}", roomId);
+        log.info("채팅방 메시지 조회 요청 - 채팅방 ID: {}", roomId);
         List<ChatMessageResponseDto> messages = chatService.getMessagesByRoom(roomId);
         return ResponseEntity.ok(messages);
     }
-
     @DeleteMapping("/chat/rooms/{chatRoomId}")
     public ResponseEntity<Void> deleteChatRoom(@PathVariable Long chatRoomId) {
-        log.info("Chat room delete request - Room ID: {}", chatRoomId);
+        log.info("채팅방 삭제 요청 - 채팅방 ID: {}", chatRoomId);
         chatService.deleteChatRoom(chatRoomId);
         return ResponseEntity.ok().build();
     }

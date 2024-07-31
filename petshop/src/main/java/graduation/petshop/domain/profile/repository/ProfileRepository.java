@@ -1,8 +1,10 @@
 package graduation.petshop.domain.profile.repository;
+
 import graduation.petshop.domain.profile.entity.Profile;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
 import java.util.Optional;
